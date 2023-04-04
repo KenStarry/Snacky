@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "227162543177",
+    "project_id": "snacky-bbcc2",
+    "storage_bucket": "snacky-bbcc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227162543177:android:8002bd9b86b1622bcedb98",
+        "android_client_info": {
+          "package_name": "com.kenstarry.snacky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227162543177-b6v6q1urv0ijdk1cq7ru4l5j7d9p92qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE-eFLtAKh4DxcjOo4-Ter3fZhOzTrozI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227162543177-b6v6q1urv0ijdk1cq7ru4l5j7d9p92qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
