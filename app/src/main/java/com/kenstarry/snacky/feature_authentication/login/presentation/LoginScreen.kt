@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,7 +26,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.kenstarry.snacky.R
+import com.kenstarry.snacky.core.presentation.components.AnnotatedClickableString
 import com.kenstarry.snacky.core.presentation.components.CustomTextField
+import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.screens.Screen
 import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
@@ -34,6 +38,7 @@ fun LoginScreen(
 ) {
 
     val loginScrollState = rememberScrollState()
+    val direction = Direction(mainNavHostController)
 
     Column(
         modifier = Modifier
@@ -63,7 +68,7 @@ fun LoginScreen(
                         )
                     ) { append("cky") }
                 },
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -83,7 +88,7 @@ fun LoginScreen(
                 contentDescription = "Snacky svg image",
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .height(200.dp)
+                    .height(230.dp)
             )
         }
 
@@ -100,7 +105,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
         ) {
 
             //  Email Address
@@ -128,6 +133,43 @@ fun LoginScreen(
                 onInput = {}
             )
 
+            //  login button
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(onClick = {
+                    //  login user
+                }) {
+                    Text(
+                        text = "Login",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+            }
+
+            //  create account button
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                AnnotatedClickableString(
+                    normalText = "New to Snacky? ",
+                    clickableText = "create account",
+                    primaryColor = MaterialTheme.colorScheme.primary
+                ) {
+                    //  open sign up screen
+                    direction.navigateToRoute(
+                        Screen.SignUp.route,
+                        null
+                    )
+                }
+            }
         }
     }
 
