@@ -8,6 +8,7 @@ import com.kenstarry.snacky.feature_authentication.sign_up.domain.repository.Sig
 import com.kenstarry.snacky.feature_authentication.sign_up.domain.use_case.CreateAccount
 import com.kenstarry.snacky.feature_authentication.sign_up.domain.use_case.SignUpUseCases
 import com.kenstarry.snacky.feature_authentication.sign_up.domain.use_case.UploadImageToStorage
+import com.kenstarry.snacky.feature_authentication.sign_up.domain.use_case.validation.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,6 +34,15 @@ object SignUpModule {
     ) = SignUpUseCases(
         createAccount = CreateAccount(repository),
         uploadImageToStorage = UploadImageToStorage(repository)
+    )
+
+    @Provides
+    @Singleton
+    fun provideValidateUseCases() = ValidateUseCases(
+        validateEmail = ValidateEmail(),
+        validateUserName = ValidateUserName(),
+        validatePassword = ValidatePassword(),
+        validateConfirmPassword = ValidateConfirmPassword()
     )
 }
 

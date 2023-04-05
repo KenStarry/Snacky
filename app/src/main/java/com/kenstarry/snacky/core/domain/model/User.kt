@@ -1,6 +1,7 @@
 package com.kenstarry.snacky.core.domain.model
 
 data class User(
+    val userImageUri: String,
     val userName: String,
     val userEmail: String,
     val userPassword: String,

@@ -1,6 +1,7 @@
 package com.kenstarry.snacky.feature_authentication.sign_up.presentation
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -11,11 +12,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.kenstarry.snacky.core.domain.model.Response
+import com.kenstarry.snacky.core.domain.model.User
 import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
+import com.kenstarry.snacky.feature_authentication.AuthConstants
+import com.kenstarry.snacky.feature_authentication.sign_up.domain.model.RegistrationFormEvents
+import com.kenstarry.snacky.feature_authentication.sign_up.domain.model.SignUpEvents
+import com.kenstarry.snacky.feature_authentication.sign_up.domain.model.validation.ValidationEvent
 import com.kenstarry.snacky.feature_authentication.sign_up.presentation.components.*
+import com.kenstarry.snacky.feature_authentication.sign_up.presentation.viewmodel.SignUpViewModel
 import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.NavConstants
 import com.kenstarry.snacky.ui.custom.spacing
+import kotlinx.coroutines.flow.collect
+import kotlin.math.sign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +37,8 @@ fun SignUpScreen(
 ) {
 
     val direction = Direction(mainNavHostController)
+    val context = LocalContext.current
+    val signUpVM: SignUpViewModel = hiltViewModel()
 
     var userImageUri by remember {
         mutableStateOf<Uri?>(null)
@@ -35,6 +50,77 @@ fun SignUpScreen(
             userImageUri = imageUri
         }
     )
+
+    //  get the validation result
+    LaunchedEffect(Unit) {
+
+        signUpVM.validationEvents.collect { event ->
+
+            when (event) {
+                is ValidationEvent.Success -> {
+
+                    Toast.makeText(context, "Everything is in order", Toast.LENGTH_SHORT).show()
+
+                    signUpVM.onEvent(
+                        SignUpEvents.CreateAccount(
+                            user = User(
+                                userImageUri = "",
+                                userName = signUpVM.formState.username,
+                                userEmail = signUpVM.formState.email,
+                                userPassword = signUpVM.formState.password,
+                                userSnackFavourites = emptyList(),
+                                userSnackOrders = emptyList(),
+                                userCartItems = emptyList(),
+                            ),
+                            response = { res ->
+                                when (res) {
+
+                                    is Response.Success -> {
+                                        //  upload image to firestore
+                                        signUpVM.onEvent(SignUpEvents.UploadImage(
+                                            uri = userImageUri.toString(),
+                                            context = context,
+                                            storageRef = "users/${signUpVM.formState.email}",
+                                            collectionName = AuthConstants.USERS_COLLECTION,
+                                            documentName = signUpVM.formState.email,
+                                            subCollectionName = null,
+                                            subCollectionDocument = null,
+                                            fieldToUpdate = "userImageUri",
+                                            onResponse = {}
+                                        ))
+
+                                        Toast.makeText(
+                                            context,
+                                            "account created successfully!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        //  navigate to main route
+                                        direction.navigateToRoute(
+                                            NavConstants.MAIN_ROUTE,
+                                            NavConstants.MAIN_ROUTE
+                                        )
+                                    }
+                                    is Response.Failure -> {
+                                        Toast.makeText(
+                                            context,
+                                            "${res.error}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        )
+                    )
+                }
+                is ValidationEvent.Failure -> {
+                    Toast.makeText(context, signUpVM.formState.password, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, signUpVM.formState.confirmPassword, Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -73,16 +159,24 @@ fun SignUpScreen(
                 )
 
                 //  username
-                UsernameSection()
+                UsernameSection(
+                    signUpVM = signUpVM
+                )
 
                 //  email address
-                EmailSection()
+                EmailSection(
+                    signUpVM = signUpVM
+                )
 
                 //  password
-                PasswordSection()
+                PasswordSection(
+                    signUpVM = signUpVM
+                )
 
                 //  confirm password
-                ConfirmPasswordSection()
+                ConfirmPasswordSection(
+                    signUpVM = signUpVM
+                )
 
                 //  create account button
                 Box(
@@ -92,7 +186,9 @@ fun SignUpScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = {
-                        //  login user
+                        //  create user account
+                        signUpVM.onFormEvent(RegistrationFormEvents.Submit)
+
                     }) {
                         Text(
                             text = "create account",
