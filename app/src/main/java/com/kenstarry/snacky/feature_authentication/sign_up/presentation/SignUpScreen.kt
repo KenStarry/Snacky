@@ -98,7 +98,7 @@ fun SignUpScreen(
                                         //  navigate to main route
                                         direction.navigateToRoute(
                                             NavConstants.MAIN_ROUTE,
-                                            NavConstants.MAIN_ROUTE
+                                            NavConstants.AUTHENTICATION_ROUTE
                                         )
                                     }
                                     is Response.Failure -> {
