@@ -15,4 +15,7 @@ object NavConstants {
 
     //  bottom nav screens
     const val HOME_BOTTOM_NAV_ROUTE = "home bottom nav screen route"
+    const val FAVOURITES_BOTTOM_NAV_ROUTE = "favourites bottom nav screen route"
+    const val CART_BOTTOM_NAV_ROUTE = "cart bottom nav screen route"
+    const val SETTINGS_BOTTOM_NAV_ROUTE = "settings bottom nav screen route"
 }

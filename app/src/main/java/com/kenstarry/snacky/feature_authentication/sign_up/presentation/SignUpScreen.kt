@@ -5,8 +5,7 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun SignUpScreen(
-    mainNavHostController: NavHostController,
-    innerNavHostController: NavHostController,
+    mainNavHostController: NavHostController
 ) {
 
 }
