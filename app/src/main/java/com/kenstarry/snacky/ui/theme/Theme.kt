@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kenstarry.snacky.ui.custom.LocalSpacing
 import com.kenstarry.snacky.ui.custom.Spacing
 
@@ -49,11 +50,22 @@ fun SnackyTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
+    val systemUiController = rememberSystemUiController()
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+
+            systemUiController.setStatusBarColor(
+                color = colorScheme.onPrimary,
+                darkIcons = !darkTheme
+            )
+
+            systemUiController.setNavigationBarColor(
+                color = colorScheme.onPrimary,
+                darkIcons = !darkTheme
+            )
         }
     }
 

@@ -7,18 +7,19 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun BackPressTopBar(
-    title: String
+    title: String,
+    onBackPressed: () -> Unit
 ) {
 
     LargeTopAppBar(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onBackPressed) {
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,
                     contentDescription = "Back arrow"
