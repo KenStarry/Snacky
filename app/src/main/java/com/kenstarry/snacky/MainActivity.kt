@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.kenstarry.snacky.navigation.graphs.RootNavGraph
 import com.kenstarry.snacky.ui.theme.SnackyTheme
 import java.net.URL
 
@@ -20,7 +22,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SnackyTheme {
-
+                RootNavGraph(
+                    navHostController = rememberNavController(),
+                    isLoggedIn = false
+                )
             }
         }
     }
