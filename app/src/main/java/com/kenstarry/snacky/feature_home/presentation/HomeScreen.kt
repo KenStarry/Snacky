@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_home.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,8 +15,10 @@ import androidx.navigation.NavHostController
 import com.canopas.lib.showcase.IntroShowCaseScaffold
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
+import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
 import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
 import com.kenstarry.snacky.feature_home.presentation.components.SearchSection
+import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,6 +30,7 @@ fun HomeScreen(
 
     val context = LocalContext.current
     val coreVM: CoreViewModel = hiltViewModel()
+    val homeVM: HomeViewModel = hiltViewModel()
 
     val currentUser = coreVM.getCurrentUser()
 
@@ -34,6 +38,11 @@ fun HomeScreen(
     coreVM.onEvent(CoreEvents.GetUserDetails(
         email = currentUser?.email ?: "no email",
         onResponse = {}
+    ))
+
+    //  get all item categories
+    homeVM.onEvent(HomeEvents.GetCategories(
+        response = {}
     ))
 
     coreVM.userDetails.value?.let { user ->
@@ -77,7 +86,7 @@ fun HomeScreen(
                         )
 
                         //  search bar
-                        SearchSection()
+//                        SearchSection()
 
                         //  snack categories
 
