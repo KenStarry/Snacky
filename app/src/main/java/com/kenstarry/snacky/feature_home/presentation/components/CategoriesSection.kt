@@ -38,7 +38,7 @@ fun CategoriesSection(
         state = lazyStaggeredGridState,
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
+            .height(50.dp),
         horizontalItemSpacing = MaterialTheme.spacing.medium
     )
 

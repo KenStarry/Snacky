@@ -65,10 +65,10 @@ class HomeRepositoryImpl @Inject constructor(
                     querySnapshot?.forEach { snapshot ->
                         snapshot?.toObject(Snack::class.java)?.let {
                             snacksList.add(it)
-                            response(Response.Success(it))
                         }
                     }
-
+                    response(Response.Success(snacksList))
+                    snacks(snacksList)
                 }
 
         } catch (e: Exception) {

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kenstarry.snacky.core.domain.model.Category
+import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
 import com.kenstarry.snacky.feature_home.domain.use_case.GetSnacks
@@ -44,7 +45,19 @@ class HomeViewModel @Inject constructor(
                         snacks = {
                             _snacks.value = it
                         },
-                        response = event.response
+                        response = {
+                            event.response
+
+                            when (it) {
+                                is Response.Success -> {
+                                    _snacks.value = it.data as List<Snack>
+                                }
+
+                                is Response.Failure -> {
+
+                                }
+                            }
+                        }
                     )
                 }
             }

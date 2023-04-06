@@ -25,9 +25,9 @@ fun CategoryItem(
 
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
+            .clip(RoundedCornerShape(MaterialTheme.spacing.extraLarge))
             .wrapContentWidth()
-            .height(50.dp)
+            .height(30.dp)
             .background(MaterialTheme.colorScheme.onSecondary)
             .padding(
                 horizontal = MaterialTheme.spacing.medium,
@@ -43,7 +43,7 @@ fun CategoryItem(
             imageUri = category.categoryImageUrl.toUri(),
             placeholder = R.drawable.undraw_ice_cream_s_2_rh,
             modifier = Modifier
-                .size(45.dp)
+                .size(30.dp)
         )
 
         //  category name

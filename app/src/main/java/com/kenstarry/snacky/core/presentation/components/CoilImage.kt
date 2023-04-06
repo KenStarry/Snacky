@@ -13,7 +13,8 @@ fun CoilImage(
     modifier: Modifier = Modifier,
     context: Context,
     imageUri: Uri?,
-    placeholder: Int
+    placeholder: Int,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
 
     imageUri?.let {
@@ -25,7 +26,7 @@ fun CoilImage(
                 .placeholder(placeholder)
                 .build(),
             contentDescription = "User image",
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             modifier = modifier
         )
 
