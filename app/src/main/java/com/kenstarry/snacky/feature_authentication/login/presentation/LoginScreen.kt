@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_authentication.login.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -24,11 +26,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kenstarry.snacky.R
+import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.presentation.components.AnnotatedClickableString
 import com.kenstarry.snacky.core.presentation.components.CustomTextField
+import com.kenstarry.snacky.feature_authentication.AuthConstants
+import com.kenstarry.snacky.feature_authentication.login.domain.model.LoginEvents
+import com.kenstarry.snacky.feature_authentication.login.domain.model.form.LoginFormEvents
+import com.kenstarry.snacky.feature_authentication.login.presentation.viewmodel.LoginViewModel
 import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.NavConstants
 import com.kenstarry.snacky.navigation.screens.Screen
 import com.kenstarry.snacky.ui.custom.spacing
 
@@ -39,6 +48,8 @@ fun LoginScreen(
 
     val loginScrollState = rememberScrollState()
     val direction = Direction(mainNavHostController)
+    val loginVM: LoginViewModel = hiltViewModel()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -110,6 +121,7 @@ fun LoginScreen(
 
             //  Email Address
             CustomTextField(
+                textFieldValue = loginVM.formState.email,
                 startIcon = Icons.Outlined.AlternateEmail,
                 endIcon = null,
                 placeholder = "Email Address",
@@ -117,11 +129,14 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Email,
                 primaryColor = MaterialTheme.colorScheme.primary,
                 tertiaryColor = MaterialTheme.colorScheme.tertiary,
-                onInput = {}
+                onInput = {
+                    loginVM.onFormEvent(LoginFormEvents.OnLoginEmailChanged(it))
+                }
             )
 
             //  Password
             CustomTextField(
+                textFieldValue = loginVM.formState.password,
                 startIcon = Icons.Outlined.Key,
                 endIcon = null,
                 placeholder = "Password",
@@ -130,7 +145,9 @@ fun LoginScreen(
                 primaryColor = MaterialTheme.colorScheme.primary,
                 tertiaryColor = MaterialTheme.colorScheme.tertiary,
                 isPassword = true,
-                onInput = {}
+                onInput = {
+                    loginVM.onFormEvent(LoginFormEvents.OnLoginPasswordChanged(it))
+                }
             )
 
             //  login button
@@ -142,6 +159,34 @@ fun LoginScreen(
             ) {
                 Button(onClick = {
                     //  login user
+                    loginVM.onEvent(LoginEvents.LoginUser(
+                        email = loginVM.formState.email,
+                        password = loginVM.formState.password,
+                        onResponse = { res ->
+                            when (res) {
+
+                                is Response.Success -> {
+                                    direction.navigateToRoute(
+                                        NavConstants.MAIN_ROUTE,
+                                        NavConstants.AUTHENTICATION_ROUTE
+                                    )
+
+                                    Toast.makeText(
+                                        context,
+                                        "Welcome back!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                is Response.Failure -> {
+                                    Toast.makeText(
+                                        context,
+                                        res.error.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    ))
                 }) {
                     Text(
                         text = "Login",
