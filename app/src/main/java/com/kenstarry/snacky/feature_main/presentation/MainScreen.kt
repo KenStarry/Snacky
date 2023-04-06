@@ -11,7 +11,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.canopas.lib.showcase.IntroShowCaseScaffold
+import com.kenstarry.snacky.feature_main.presentation.components.MainBottomBar
+import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.graphs.home_graph.HomeInnerGraph
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,12 +24,18 @@ fun MainScreen(
     mainNavHostController: NavHostController
 ) {
 
+    val navController = rememberNavController()
+
     IntroShowCaseScaffold(
         showIntroShowCase = false,
         onShowCaseCompleted = { /*TODO*/ }
     ) {
 
-        Scaffold() { contentPadding ->
+        Scaffold(
+            bottomBar = {
+                MainBottomBar(innerNavHostController = navController)
+            }
+        ) { contentPadding ->
 
             Box(
                 modifier = Modifier
@@ -41,12 +51,18 @@ fun MainScreen(
                         .padding(MaterialTheme.spacing.medium)
                 ) {
 
+                    //  call the inner navgraph
+                    HomeInnerGraph(
+                        mainNavHostController = mainNavHostController,
+                        innerNavHostController = navController
+                    )
+
                 }
 
             }
 
         }
-        
+
     }
 
 }
