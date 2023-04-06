@@ -1,13 +1,11 @@
 package com.kenstarry.snacky.feature_home.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +15,7 @@ import com.canopas.lib.showcase.IntroShowCaseScaffold
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
+import com.kenstarry.snacky.feature_home.presentation.components.SearchSection
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,8 +62,24 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.onPrimary)
-                            .padding(MaterialTheme.spacing.medium)
+                            .padding(
+                                horizontal = MaterialTheme.spacing.medium,
+                                vertical = MaterialTheme.spacing.small
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
                     ) {
+
+                        //  hungry text
+                        Text(
+                            text = "hungry? Order Up!",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+
+                        //  search bar
+                        SearchSection()
+
+                        //  snack categories
 
                     }
 

@@ -2,6 +2,7 @@ package com.kenstarry.snacky.feature_home.presentation.components
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -67,7 +68,11 @@ fun HomeTopBar(
             containerColor = MaterialTheme.colorScheme.onPrimary,
             titleContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
             actionIconContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f)
-        )
+        ),
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.onPrimary)
+            .padding(MaterialTheme.spacing.small),
+
     )
 
 }

@@ -48,7 +48,6 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.onPrimary)
-                        .padding(MaterialTheme.spacing.medium)
                 ) {
 
                     //  call the inner navgraph
