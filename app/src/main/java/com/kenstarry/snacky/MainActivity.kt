@@ -12,7 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.navigation.graphs.RootNavGraph
 import com.kenstarry.snacky.ui.theme.SnackyTheme
 import dagger.hilt.EntryPoint
@@ -26,9 +28,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SnackyTheme {
+
+                val coreVM: CoreViewModel = hiltViewModel()
+
                 RootNavGraph(
                     navHostController = rememberNavController(),
-                    isLoggedIn = false
+                    isLoggedIn = coreVM.isUserLoggedIn()
                 )
             }
         }
