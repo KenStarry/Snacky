@@ -8,4 +8,6 @@ data class User(
     val userSnackFavourites: List<String>,
     val userSnackOrders: List<String>,
     val userCartItems: List<String>
-)
+) {
+    constructor() : this("", "", "", "", emptyList(), emptyList(), emptyList())
+}

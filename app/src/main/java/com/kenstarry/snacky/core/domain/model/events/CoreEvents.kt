@@ -7,7 +7,6 @@ sealed class CoreEvents {
 
     data class GetUserDetails(
         val email: String,
-        val user: (user: User?) -> Unit,
         val onResponse: (response: Response<*>) -> Unit
     ) : CoreEvents()
 }

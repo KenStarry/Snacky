@@ -1,12 +1,98 @@
 package com.kenstarry.snacky.feature_home.presentation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.canopas.lib.showcase.IntroShowCaseScaffold
+import com.kenstarry.snacky.core.domain.model.events.CoreEvents
+import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
+import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
+import com.kenstarry.snacky.ui.custom.spacing
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     mainNavHostController: NavHostController,
     innerNavHostController: NavHostController,
 ) {
 
+    val context = LocalContext.current
+    val coreVM: CoreViewModel = hiltViewModel()
+
+    val currentUser = coreVM.getCurrentUser()
+
+    //  get current user details
+    coreVM.onEvent(CoreEvents.GetUserDetails(
+        email = currentUser?.email ?: "no email",
+        onResponse = {}
+    ))
+
+    coreVM.userDetails.value?.let { user ->
+        IntroShowCaseScaffold(
+            showIntroShowCase = false,
+            onShowCaseCompleted = { /*TODO*/ }
+        ) {
+
+            Scaffold(
+                topBar = {
+                    HomeTopBar(
+                        context = context,
+                        userName = user.userName,
+                        imageUri = user.userImageUri
+                    )
+                }
+            ) { contentPadding ->
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                ) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.onPrimary)
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
