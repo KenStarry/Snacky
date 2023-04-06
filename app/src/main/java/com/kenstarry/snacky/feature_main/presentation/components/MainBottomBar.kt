@@ -49,36 +49,21 @@ fun MainBottomBar(
 
     AnimatedVisibility(visible = isBottomBarVisible) {
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .background(Color.Transparent)
-                .padding(bottom = MaterialTheme.spacing.medium),
-            contentAlignment = Alignment.Center
+        NavigationBar(
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ) {
 
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.onSecondary,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(MaterialTheme.spacing.large))
-                    .fillMaxWidth(0.9f)
-                    .wrapContentHeight()
-            ) {
-
-                screens.forEach { screen ->
-                    MainBottomBarItem(
-                        currentDestination = currentDestination,
-                        screen = screen,
-                        onBottomBarItemClicked = {
-                            direction.navigateToRoute(
-                                screen.route,
-                                BottomNavScreens.Home.route
-                            )
-                        }
-                    )
-                }
-
+            screens.forEach { screen ->
+                MainBottomBarItem(
+                    currentDestination = currentDestination,
+                    screen = screen,
+                    onBottomBarItemClicked = {
+                        direction.navigateToRoute(
+                            screen.route,
+                            BottomNavScreens.Home.route
+                        )
+                    }
+                )
             }
 
         }

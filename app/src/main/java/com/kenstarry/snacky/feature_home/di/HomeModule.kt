@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kenstarry.snacky.feature_home.data.repository.HomeRepositoryImpl
 import com.kenstarry.snacky.feature_home.domain.repository.HomeRepository
 import com.kenstarry.snacky.feature_home.domain.use_case.GetCategories
+import com.kenstarry.snacky.feature_home.domain.use_case.GetSnacks
 import com.kenstarry.snacky.feature_home.domain.use_case.HomeUseCases
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,8 @@ object HomeModule {
     fun provideHomeUseCases(
         repository: HomeRepository
     ) = HomeUseCases(
-        getCategories = GetCategories(repository)
+        getCategories = GetCategories(repository),
+        getSnacks = GetSnacks(repository)
     )
 }
 

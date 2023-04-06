@@ -8,4 +8,8 @@ sealed class HomeEvents {
     data class GetCategories(
         val response: (response: Response<*>) -> Unit
     ) : HomeEvents()
+
+    data class GetSnacks(
+        val response: (response: Response<*>) -> Unit
+    ) : HomeEvents()
 }

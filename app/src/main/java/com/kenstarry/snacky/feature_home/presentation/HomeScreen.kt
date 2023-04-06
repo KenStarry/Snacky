@@ -16,7 +16,9 @@ import com.canopas.lib.showcase.IntroShowCaseScaffold
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
+import com.kenstarry.snacky.feature_home.presentation.components.CategoriesSection
 import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
+import com.kenstarry.snacky.feature_home.presentation.components.PopularSection
 import com.kenstarry.snacky.feature_home.presentation.components.SearchSection
 import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.ui.custom.spacing
@@ -42,6 +44,11 @@ fun HomeScreen(
 
     //  get all item categories
     homeVM.onEvent(HomeEvents.GetCategories(
+        response = {}
+    ))
+
+    //  get all snacks categories
+    homeVM.onEvent(HomeEvents.GetSnacks(
         response = {}
     ))
 
@@ -89,6 +96,15 @@ fun HomeScreen(
 //                        SearchSection()
 
                         //  snack categories
+                        CategoriesSection(
+                            context = context,
+                            categories = homeVM.categories.value
+                        )
+
+                        //  popular section
+                        PopularSection(
+                            popularSnacks = homeVM.snacks.value
+                        )
 
                     }
 

@@ -9,4 +9,7 @@ data class Snack(
     val snackPreparationTime: String,
     val snackRating: String,
     val snackCategory: String
-)
+) {
+    constructor(): this(SnackNameModel("", ""), "", "", "",
+    0, "", "", "")
+}
