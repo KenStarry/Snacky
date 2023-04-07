@@ -25,16 +25,11 @@ fun CardButton(
 ) {
     Card(
         modifier = Modifier
-            .size(45.dp)
-            .shadow(
-                ambientColor = primaryColor,
-                spotColor = primaryColor,
-                elevation = MaterialTheme.spacing.large
-            ),
+            .size(45.dp),
         shape = RoundedCornerShape(MaterialTheme.spacing.medium),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary
         )
     ) {
 
