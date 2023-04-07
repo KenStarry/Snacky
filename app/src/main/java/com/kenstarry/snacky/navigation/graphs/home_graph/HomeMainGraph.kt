@@ -25,6 +25,9 @@ fun NavGraphBuilder.homeMainNavgraph(
         composable(
             route = Screen.Details.route,
             arguments = listOf(
+                navArgument("category") {
+                    type = NavType.StringType
+                },
                 navArgument("title") {
                     type = NavType.StringType
                 }
@@ -32,6 +35,7 @@ fun NavGraphBuilder.homeMainNavgraph(
         ) {
             DetailsScreen(
                 mainNavHostController = mainNavHostController,
+                snackCategory = it.arguments?.getString("category") ?: "no title",
                 snackTitle = it.arguments?.getString("title") ?: "no title"
             )
         }

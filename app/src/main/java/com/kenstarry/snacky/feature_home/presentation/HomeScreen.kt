@@ -1,6 +1,5 @@
 package com.kenstarry.snacky.feature_home.presentation
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +18,6 @@ import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
 import com.kenstarry.snacky.feature_home.presentation.components.CategoriesSection
 import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
 import com.kenstarry.snacky.feature_home.presentation.components.PopularSection
-import com.kenstarry.snacky.feature_home.presentation.components.SearchSection
 import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.Screen
@@ -111,7 +109,10 @@ fun HomeScreen(
                             onSnackClicked = {
                                 //  open details for that snack
                                 direction.navigateToRoute(
-                                    Screen.Details.passSnackTitle(it.snackName.title),
+                                    Screen.Details.passSnackTitleAndCategory(
+                                        it.snackCategory,
+                                        it.snackName.title
+                                    ),
                                     null
                                 )
                             }

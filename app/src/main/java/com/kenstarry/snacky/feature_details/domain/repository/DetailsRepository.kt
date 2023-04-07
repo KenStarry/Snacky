@@ -6,6 +6,8 @@ import com.kenstarry.snacky.core.domain.model.Snack
 interface DetailsRepository {
 
     suspend fun getSnack(
+        categoryTitle: String,
+        snackTitle: String,
         snack: (snack: Snack) -> Unit,
         response: (response: Response<*>) -> Unit
     )

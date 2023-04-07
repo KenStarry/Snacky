@@ -16,25 +16,48 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
 import com.kenstarry.snacky.core.presentation.utils.PaletteGenerator
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
+import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
+import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
     mainNavHostController: NavHostController,
+    snackCategory: String,
     snackTitle: String
 ) {
+    val systemController = rememberSystemUiController()
 
     val direction = Direction(mainNavHostController)
     val coreVM: CoreViewModel = hiltViewModel()
+    val detailsVM: DetailsViewModel = hiltViewModel()
     val context = LocalContext.current
 
     //  get snack
+    detailsVM.onEvent(DetailsEvents.GetSnack(
+        categoryTitle = snackCategory,
+        snackTitle = snackTitle,
+        response = {
+            when (it) {
+                is Response.Success -> {
+                    Toast.makeText(context, "success", Toast.LENGTH_SHORT).show()
+                }
+
+                is Response.Failure -> {
+                    Toast.makeText(context, "could not retrieve details.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    ))
 
     var vibrant by remember { mutableStateOf("#000000") }
     var darkVibrant by remember { mutableStateOf("#000000") }
@@ -45,82 +68,85 @@ fun DetailsScreen(
     var lightMutedSwatch by remember { mutableStateOf("#000000") }
     var darkMutedSwatch by remember { mutableStateOf("#000000") }
 
-    val imageUrl =
-        "https://firebasestorage.googleapis.com/v0/b/snacky-bbcc2.appspot.com/o/snacks%2Fcupcakes%2Fcupcake1.png?alt=media&token=efeabae6-d1b3-4e01-b003-7eb5a9c11d29"
-
     var launchedEffectTriggered by remember {
         mutableStateOf(false)
     }
 
-    LaunchedEffect(key1 = launchedEffectTriggered) {
+    detailsVM.snack.value?.let { snack ->
 
-        try {
+        LaunchedEffect(key1 = launchedEffectTriggered) {
 
-            val bitmap = PaletteGenerator.convertImageToBitmap(
-                imageUrl = imageUrl,
-                context = context
-            )
+            try {
 
-            if (bitmap != null) {
-                launchedEffectTriggered = true
+                val bitmap = PaletteGenerator.convertImageToBitmap(
+                    imageUrl = snack.snackImageUrl,
+                    context = context
+                )
 
-                coreVM.onEvent(
-                    CoreEvents.SetColorPalette(
-                        colors = PaletteGenerator.extractColorsFromBitmap(
-                            bitmap
+                if (bitmap != null) {
+                    launchedEffectTriggered = true
+
+                    coreVM.onEvent(
+                        CoreEvents.SetColorPalette(
+                            colors = PaletteGenerator.extractColorsFromBitmap(
+                                bitmap
+                            )
                         )
                     )
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (coreVM.colorPalette.value.isNotEmpty() && launchedEffectTriggered) {
+            LaunchedEffect(key1 = true) {
+
+                vibrant = coreVM.colorPalette.value["vibrant"] ?: "000000"
+                darkVibrant = coreVM.colorPalette.value["darkVibrant"] ?: "000000"
+                onDarkVibrant = coreVM.colorPalette.value["onDarkVibrant"] ?: "000000"
+                lightVibrant = coreVM.colorPalette.value["lightVibrant"] ?: "000000"
+                dominantSwatch = coreVM.colorPalette.value["dominantSwatch"] ?: "000000"
+                mutedSwatch = coreVM.colorPalette.value["mutedSwatch"] ?: "000000"
+                lightMutedSwatch = coreVM.colorPalette.value["lightMutedSwatch"] ?: "000000"
+                darkMutedSwatch = coreVM.colorPalette.value["darkMutedSwatch"] ?: "000000"
+            }
+        }
+
+        systemController.setStatusBarColor(
+            color = Color(parseColor(lightVibrant))
+        )
+
+        Scaffold(
+            topBar = {
+                BackPressTopBar(
+                    title = snack.snackName.title,
+                    onBackPressed = {
+                        direction.navigateUp()
+                    }
                 )
             }
+        ) { contentPadding ->
 
-        } catch (e: Exception) {
-            Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    if (coreVM.colorPalette.value.isNotEmpty() && launchedEffectTriggered) {
-        LaunchedEffect(key1 = true) {
-
-            vibrant = coreVM.colorPalette.value["vibrant"] ?: "000000"
-            darkVibrant = coreVM.colorPalette.value["darkVibrant"] ?: "000000"
-            onDarkVibrant = coreVM.colorPalette.value["onDarkVibrant"] ?: "000000"
-            lightVibrant = coreVM.colorPalette.value["lightVibrant"] ?: "000000"
-            dominantSwatch = coreVM.colorPalette.value["dominantSwatch"] ?: "000000"
-            mutedSwatch = coreVM.colorPalette.value["mutedSwatch"] ?: "000000"
-            lightMutedSwatch = coreVM.colorPalette.value["lightMutedSwatch"] ?: "000000"
-            darkMutedSwatch = coreVM.colorPalette.value["darkMutedSwatch"] ?: "000000"
-        }
-    }
-
-
-    Scaffold(
-        topBar = {
-            BackPressTopBar(
-                title = snackTitle,
-                onBackPressed = {
-                    direction.navigateUp()
-                }
-            )
-        }
-    ) { contentPadding ->
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
-
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(parseColor(darkVibrant)))
-                    .padding(MaterialTheme.spacing.medium)
+                    .padding(contentPadding)
             ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.onPrimary)
+                        .padding(MaterialTheme.spacing.medium)
+                ) {
+
+                }
 
             }
 
         }
-
     }
 
 }
