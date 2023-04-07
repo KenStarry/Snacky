@@ -25,6 +25,7 @@ import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
 import com.kenstarry.snacky.feature_details.presentation.components.DetailsHeader
 import com.kenstarry.snacky.feature_details.presentation.components.DetailsImage
+import com.kenstarry.snacky.feature_details.presentation.components.DetailsPrice
 import com.kenstarry.snacky.feature_details.presentation.components.DetailsTopBar
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.navigation.Direction
@@ -157,6 +158,12 @@ fun DetailsScreen(
                     DetailsImage(
                         context = context,
                         snackImage = snack.snackImageUrl,
+                        primaryColor = Color(parseColor(lightVibrant))
+                    )
+
+                    //  price
+                    DetailsPrice(
+                        snackPrice = snack.snackPrice,
                         primaryColor = Color(parseColor(lightVibrant))
                     )
 

@@ -60,69 +60,20 @@ fun DetailsImage(
         ) {
 
             //  favourites
-            Card(
-                modifier = Modifier
-                    .size(45.dp)
-                    .shadow(
-                        ambientColor = primaryColor,
-                        spotColor = primaryColor,
-                        elevation = MaterialTheme.spacing.large
-                    ),
-                shape = RoundedCornerShape(MaterialTheme.spacing.medium),
-                colors = CardDefaults.elevatedCardColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
+            CardButton(
+                icon = Icons.Outlined.FavoriteBorder,
+                primaryColor = primaryColor,
+                onClick = {}
+            )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favourite icon",
-                        tint = primaryColor
-                    )
-
-                }
-
-            }
-            
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            Card(
-                modifier = Modifier
-                    .size(45.dp)
-                    .shadow(
-                        ambientColor = primaryColor,
-                        spotColor = primaryColor,
-                        elevation = MaterialTheme.spacing.large
-                    ),
-                shape = RoundedCornerShape(MaterialTheme.spacing.medium),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Outlined.Call,
-                        contentDescription = "Call icon",
-                        tint = primaryColor
-                    )
-
-                }
-
-            }
+            //  call button
+            CardButton(
+                icon = Icons.Outlined.Call,
+                primaryColor = primaryColor,
+                onClick = {}
+            )
 
         }
 

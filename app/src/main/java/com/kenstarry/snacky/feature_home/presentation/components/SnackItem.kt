@@ -37,7 +37,7 @@ fun SnackItem(
     Card(
         modifier = Modifier
             .width(200.dp)
-            .height(270.dp),
+            .height(280.dp),
         shape = RoundedCornerShape(MaterialTheme.spacing.medium),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -88,7 +88,7 @@ fun SnackItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(120.dp)
             )
 
             //  calories
