@@ -6,16 +6,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kenstarry.snacky.core.domain.model.Response
+import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
 import com.kenstarry.snacky.core.presentation.utils.PaletteGenerator
@@ -187,6 +191,14 @@ fun DetailsScreen(
                             .fillMaxWidth(),
                         contentPadding = PaddingValues(MaterialTheme.spacing.medium)
                     ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ShoppingCart,
+                            contentDescription = "cart icon",
+                            tint = Color(parseColor(darkVibrant))
+                        )
+                        
+                        Spacer(modifier = Modifier.width(16.dp))
+
                         Text(
                             text = "Add To Cart",
                             style = MaterialTheme.typography.bodyMedium

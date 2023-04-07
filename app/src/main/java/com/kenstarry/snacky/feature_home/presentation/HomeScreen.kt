@@ -23,6 +23,8 @@ import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.Screen
 import com.kenstarry.snacky.ui.custom.spacing
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
