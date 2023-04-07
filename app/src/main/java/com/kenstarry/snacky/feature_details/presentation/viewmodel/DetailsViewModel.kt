@@ -22,6 +22,9 @@ class DetailsViewModel @Inject constructor(
     private val _isFavoriteToggled = mutableStateOf<Boolean>(false)
     val isFavoriteToggled: State<Boolean> = _isFavoriteToggled
 
+    private val _itemQuantity = mutableStateOf<Int>(0)
+    val itemQuantity: State<Int> = _itemQuantity
+
     fun onEvent(event: DetailsEvents) {
 
         when (event) {
@@ -49,6 +52,15 @@ class DetailsViewModel @Inject constructor(
 
             is DetailsEvents.ToggleFavoritesButton -> {
                 _isFavoriteToggled.value = event.isFavoriteClicked
+            }
+
+            is DetailsEvents.UpdateItemsCount -> {
+                if (event.isAdd) {
+                    _itemQuantity.value += 1
+                } else {
+                    if (_itemQuantity.value > 0)
+                        _itemQuantity.value -= 1
+                }
             }
         }
     }

@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.kenstarry.snacky.core.presentation.components.PriceText
+import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
+import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun DetailsPrice(
+    detailsVM: DetailsViewModel,
     snackPrice: Int,
     primaryColor: Color
 ) {
@@ -60,12 +63,14 @@ fun DetailsPrice(
                     CardButton(
                         icon = Icons.Outlined.Minimize,
                         primaryColor = primaryColor,
-                        onClick = {}
+                        onClick = {
+                            detailsVM.onEvent(DetailsEvents.UpdateItemsCount(false))
+                        }
                     )
 
                     //  counter
                     Text(
-                        text = "0",
+                        text = detailsVM.itemQuantity.value.toString(),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                     )
@@ -75,7 +80,7 @@ fun DetailsPrice(
                         icon = Icons.Outlined.Add,
                         primaryColor = primaryColor,
                         onClick = {
-
+                            detailsVM.onEvent(DetailsEvents.UpdateItemsCount(true))
                         }
                     )
 
@@ -85,7 +90,13 @@ fun DetailsPrice(
 
             //  total price
             Text(
-                text = "Total Price: ksh. 0.0",
+                text = "Total Price: ksh. ${
+                    if (detailsVM.itemQuantity.value > 0) {
+                        detailsVM.itemQuantity.value * snackPrice
+                    } else {
+                        0.0
+                    }
+                }",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5f)
             )

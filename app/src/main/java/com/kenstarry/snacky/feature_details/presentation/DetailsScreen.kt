@@ -220,6 +220,7 @@ fun DetailsScreen(
 
                     //  price
                     DetailsPrice(
+                        detailsVM = detailsVM,
                         snackPrice = snack.snackPrice,
                         primaryColor = Color(parseColor(lightVibrant))
                     )
@@ -241,8 +242,16 @@ fun DetailsScreen(
                     Button(
                         onClick = { /*TODO*/ },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(parseColor(lightVibrant)),
-                            contentColor = Color.White
+
+                            containerColor = if (detailsVM.itemQuantity.value > 0)
+                                Color(parseColor(lightVibrant))
+                            else
+                                MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f),
+
+                            contentColor = if (detailsVM.itemQuantity.value > 0)
+                                Color.White
+                            else
+                                MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                         ),
                         modifier = Modifier
                             .fillMaxWidth(),

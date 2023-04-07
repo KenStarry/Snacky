@@ -21,4 +21,8 @@ sealed class DetailsEvents {
     data class ToggleFavoritesButton(
         val isFavoriteClicked: Boolean
     ) : DetailsEvents()
+
+    data class UpdateItemsCount(
+        val isAdd: Boolean
+    ) : DetailsEvents()
 }
