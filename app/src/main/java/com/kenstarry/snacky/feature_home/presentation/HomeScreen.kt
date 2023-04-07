@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.canopas.lib.showcase.IntroShowCaseScaffold
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
@@ -35,6 +36,11 @@ fun HomeScreen(
     val homeVM: HomeViewModel = hiltViewModel()
     val direction = Direction(mainNavHostController)
     val directionInner = Direction(innerNavHostController)
+    val systemController = rememberSystemUiController()
+
+    systemController.setStatusBarColor(
+        color = MaterialTheme.colorScheme.onPrimary
+    )
 
     val currentUser = coreVM.getCurrentUser()
 

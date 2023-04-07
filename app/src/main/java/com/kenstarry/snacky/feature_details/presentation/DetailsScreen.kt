@@ -3,14 +3,14 @@ package com.kenstarry.snacky.feature_details.presentation
 import android.graphics.Color.parseColor
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +23,9 @@ import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
 import com.kenstarry.snacky.core.presentation.utils.PaletteGenerator
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
+import com.kenstarry.snacky.feature_details.presentation.components.DetailsHeader
+import com.kenstarry.snacky.feature_details.presentation.components.DetailsImage
+import com.kenstarry.snacky.feature_details.presentation.components.DetailsTopBar
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
@@ -53,7 +56,8 @@ fun DetailsScreen(
                 }
 
                 is Response.Failure -> {
-                    Toast.makeText(context, "could not retrieve details.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "could not retrieve details.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -120,8 +124,7 @@ fun DetailsScreen(
 
         Scaffold(
             topBar = {
-                BackPressTopBar(
-                    title = snack.snackName.title,
+                DetailsTopBar(
                     onBackPressed = {
                         direction.navigateUp()
                     }
@@ -139,8 +142,23 @@ fun DetailsScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.onPrimary)
-                        .padding(MaterialTheme.spacing.medium)
+                        .verticalScroll(rememberScrollState())
+                        .padding(MaterialTheme.spacing.medium),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
                 ) {
+
+                    //  header
+                    DetailsHeader(
+                        snackName = snack.snackName
+                    )
+
+                    //  image
+                    DetailsImage(
+                        context = context,
+                        snackImage = snack.snackImageUrl,
+                        primaryColor = Color(parseColor(lightVibrant))
+                    )
 
                 }
 

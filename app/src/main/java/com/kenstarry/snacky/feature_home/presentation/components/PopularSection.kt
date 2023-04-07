@@ -36,7 +36,7 @@ fun PopularSection(
         //  title
         Text(
             text = "Popular",
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
         )
 
