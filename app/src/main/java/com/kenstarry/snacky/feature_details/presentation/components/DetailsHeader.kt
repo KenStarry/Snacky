@@ -23,39 +23,17 @@ fun DetailsHeader(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
     ) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = snackCategory,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5f)
-            )
-
-            Icon(
-                imageVector = Icons.Outlined.ArrowRight,
-                contentDescription = "arrow right",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5f)
-            )
-
-            Text(
-                text = snackName.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
-                maxLines = Int.MAX_VALUE,
-                softWrap = true
-            )
-
-        }
+        Text(
+            text = snackName.title,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+            maxLines = Int.MAX_VALUE,
+            softWrap = true
+        )
 
         Text(
             text = snackName.subTitle,

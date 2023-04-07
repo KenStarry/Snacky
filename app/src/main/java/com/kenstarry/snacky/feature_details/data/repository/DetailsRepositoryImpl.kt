@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_details.data.repository
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.Snack
@@ -32,6 +33,32 @@ class DetailsRepositoryImpl @Inject constructor(
 
                     snapshot?.toObject(Snack::class.java)?.let(snack)
                 }
+
+        } catch (e: Exception) {
+            response(Response.Failure(e.localizedMessage))
+        }
+    }
+
+    override suspend fun updateSnackFavorites(
+        email: String,
+        snackTitle: String,
+        isAdd: Boolean,
+        response: (response: Response<*>) -> Unit
+    ) {
+        try {
+
+            val collectionRef = db.collection(Constants.USERS_COLLECTION)
+                .document(email)
+
+            if (isAdd) {
+                collectionRef.update("userSnackFavourites", FieldValue.arrayUnion(snackTitle))
+                    .addOnSuccessListener { response(Response.Success(true)) }
+                    .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
+            } else {
+                collectionRef.update("userSnackFavourites", FieldValue.arrayRemove(snackTitle))
+                    .addOnSuccessListener { response(Response.Success(true)) }
+                    .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
+            }
 
         } catch (e: Exception) {
             response(Response.Failure(e.localizedMessage))

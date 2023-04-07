@@ -74,7 +74,9 @@ fun DetailsPrice(
                     CardButton(
                         icon = Icons.Outlined.Add,
                         primaryColor = primaryColor,
-                        onClick = {}
+                        onClick = {
+
+                        }
                     )
 
                 }

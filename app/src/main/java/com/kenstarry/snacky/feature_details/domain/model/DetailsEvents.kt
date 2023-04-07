@@ -10,4 +10,15 @@ sealed class DetailsEvents {
         val snackTitle: String,
         val response: (response: Response<*>) -> Unit
     ) : DetailsEvents()
+
+    data class UpdateSnackFavorites(
+        val email: String,
+        val snackTitle: String,
+        val isAdd: Boolean,
+        val response: (response: Response<*>) -> Unit
+    ) : DetailsEvents()
+
+    data class ToggleFavoritesButton(
+        val isFavoriteClicked: Boolean
+    ) : DetailsEvents()
 }

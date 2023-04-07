@@ -25,10 +25,7 @@ import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
 import com.kenstarry.snacky.core.presentation.utils.PaletteGenerator
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
-import com.kenstarry.snacky.feature_details.presentation.components.DetailsHeader
-import com.kenstarry.snacky.feature_details.presentation.components.DetailsImage
-import com.kenstarry.snacky.feature_details.presentation.components.DetailsPrice
-import com.kenstarry.snacky.feature_details.presentation.components.DetailsTopBar
+import com.kenstarry.snacky.feature_details.presentation.components.*
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
@@ -48,6 +45,12 @@ fun DetailsScreen(
     val detailsVM: DetailsViewModel = hiltViewModel()
     val context = LocalContext.current
 
+    val currentUser = coreVM.getCurrentUser()
+    coreVM.onEvent(CoreEvents.GetUserDetails(
+        email = currentUser?.email ?: "no email",
+        onResponse = {}
+    ))
+
     //  get snack
     detailsVM.onEvent(DetailsEvents.GetSnack(
         categoryTitle = snackCategory,
@@ -65,6 +68,13 @@ fun DetailsScreen(
             }
         }
     ))
+
+    coreVM.userDetails.value?.let {
+        //  set the favourites list
+        if (it.userSnackFavourites.contains(snackTitle)) {
+            detailsVM.onEvent(DetailsEvents.ToggleFavoritesButton(true))
+        }
+    }
 
     var vibrant by remember { mutableStateOf("#000000") }
     var darkVibrant by remember { mutableStateOf("#000000") }
@@ -160,8 +170,52 @@ fun DetailsScreen(
                     //  image
                     DetailsImage(
                         context = context,
+                        detailsViewModel = detailsVM,
                         snackImage = snack.snackImageUrl,
-                        primaryColor = Color(parseColor(lightVibrant))
+                        primaryColor = Color(parseColor(lightVibrant)),
+                        onFavoriteClicked = {
+
+                            detailsVM.onEvent(
+                                DetailsEvents.ToggleFavoritesButton(
+                                    !detailsVM.isFavoriteToggled.value
+                                )
+                            )
+
+                            //  add item to update list
+                            currentUser?.email?.let {
+                                detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
+                                    email = it,
+                                    snackTitle = snackTitle,
+                                    isAdd = detailsVM.isFavoriteToggled.value,
+                                    response = { res ->
+                                        when (res) {
+                                            is Response.Success -> {
+                                                if (detailsVM.isFavoriteToggled.value) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Snack added to favourites successfully!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                } else {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Snack removed from favourites successfully!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                            is Response.Failure -> {
+                                                Toast.makeText(
+                                                    context,
+                                                    res.error.toString(),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                    }
+                                ))
+                            }
+                        }
                     )
 
                     //  price
@@ -169,6 +223,9 @@ fun DetailsScreen(
                         snackPrice = snack.snackPrice,
                         primaryColor = Color(parseColor(lightVibrant))
                     )
+
+                    //  description
+                    DetailsDescription(snackDescription = snack.snackDescription)
 
                 }
 
@@ -196,8 +253,8 @@ fun DetailsScreen(
                             contentDescription = "cart icon",
                             tint = Color(parseColor(darkVibrant))
                         )
-                        
-                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
                         Text(
                             text = "Add To Cart",

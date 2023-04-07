@@ -11,4 +11,11 @@ interface DetailsRepository {
         snack: (snack: Snack) -> Unit,
         response: (response: Response<*>) -> Unit
     )
+
+    suspend fun updateSnackFavorites(
+        email: String,
+        snackTitle: String,
+        isAdd: Boolean,
+        response: (response: Response<*>) -> Unit
+    )
 }

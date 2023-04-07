@@ -5,6 +5,7 @@ import com.kenstarry.snacky.feature_details.data.repository.DetailsRepositoryImp
 import com.kenstarry.snacky.feature_details.domain.repository.DetailsRepository
 import com.kenstarry.snacky.feature_details.domain.use_case.DetailsUseCases
 import com.kenstarry.snacky.feature_details.domain.use_case.GetSnack
+import com.kenstarry.snacky.feature_details.domain.use_case.UpdateSnackFavorites
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +27,7 @@ object DetailsModule {
     fun provideDetailsUseCases(
         repository: DetailsRepository
     ) = DetailsUseCases(
-        getSnack = GetSnack(repository)
+        getSnack = GetSnack(repository),
+        updateSnackFavorites = UpdateSnackFavorites(repository)
     )
 }

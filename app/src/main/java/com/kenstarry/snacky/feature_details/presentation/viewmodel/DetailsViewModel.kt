@@ -19,6 +19,9 @@ class DetailsViewModel @Inject constructor(
     private val _snack = mutableStateOf<Snack?>(null)
     val snack: State<Snack?> = _snack
 
+    private val _isFavoriteToggled = mutableStateOf<Boolean>(false)
+    val isFavoriteToggled: State<Boolean> = _isFavoriteToggled
+
     fun onEvent(event: DetailsEvents) {
 
         when (event) {
@@ -31,6 +34,21 @@ class DetailsViewModel @Inject constructor(
                         response = event.response
                     )
                 }
+            }
+
+            is DetailsEvents.UpdateSnackFavorites -> {
+                viewModelScope.launch {
+                    useCases.updateSnackFavorites(
+                        email = event.email,
+                        snackTitle = event.snackTitle,
+                        isAdd = event.isAdd,
+                        response = event.response
+                    )
+                }
+            }
+
+            is DetailsEvents.ToggleFavoritesButton -> {
+                _isFavoriteToggled.value = event.isFavoriteClicked
             }
         }
     }

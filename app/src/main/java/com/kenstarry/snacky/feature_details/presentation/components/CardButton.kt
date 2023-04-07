@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_details.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -35,7 +36,8 @@ fun CardButton(
 
         Box(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
 
