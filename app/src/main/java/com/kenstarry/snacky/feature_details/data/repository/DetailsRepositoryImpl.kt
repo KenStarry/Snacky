@@ -2,6 +2,7 @@ package com.kenstarry.snacky.feature_details.data.repository
 
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kenstarry.snacky.core.domain.model.Cart
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.core.presentation.utils.Constants
@@ -56,6 +57,32 @@ class DetailsRepositoryImpl @Inject constructor(
                     .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
             } else {
                 collectionRef.update("userSnackFavourites", FieldValue.arrayRemove(snackTitle))
+                    .addOnSuccessListener { response(Response.Success(true)) }
+                    .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
+            }
+
+        } catch (e: Exception) {
+            response(Response.Failure(e.localizedMessage))
+        }
+    }
+
+    override suspend fun updateCartItems(
+        email: String,
+        cart: Cart,
+        isAdd: Boolean,
+        response: (response: Response<*>) -> Unit
+    ) {
+        try {
+
+            val collectionRef = db.collection(Constants.USERS_COLLECTION)
+                .document(email)
+
+            if (isAdd) {
+                collectionRef.update("userCartItems", FieldValue.arrayUnion(cart))
+                    .addOnSuccessListener { response(Response.Success(true)) }
+                    .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
+            } else {
+                collectionRef.update("userCartItems", FieldValue.arrayRemove(cart))
                     .addOnSuccessListener { response(Response.Success(true)) }
                     .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
             }

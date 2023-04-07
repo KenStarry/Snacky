@@ -50,6 +50,17 @@ class DetailsViewModel @Inject constructor(
                 }
             }
 
+            is DetailsEvents.UpdateCartItems -> {
+                viewModelScope.launch {
+                    useCases.updateCartItems(
+                        email = event.email,
+                        cart = event.cart,
+                        isAdd = event.isAdd,
+                        response = event.response
+                    )
+                }
+            }
+
             is DetailsEvents.ToggleFavoritesButton -> {
                 _isFavoriteToggled.value = event.isFavoriteClicked
             }

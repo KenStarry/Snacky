@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.kenstarry.snacky.core.domain.model.Cart
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
@@ -238,37 +240,83 @@ fun DetailsScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    //  add to card button
-                    Button(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(
 
-                            containerColor = if (detailsVM.itemQuantity.value > 0)
-                                Color(parseColor(lightVibrant))
-                            else
-                                MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f),
+                    val myCart = Cart(
+                        snackTitle = snackTitle,
+                        snackCategory = snackCategory,
+                        snackPrice = snack.snackPrice,
+                        snackQuantity = detailsVM.itemQuantity.value,
+                        snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
+                    )
 
-                            contentColor = if (detailsVM.itemQuantity.value > 0)
-                                Color.White
-                            else
-                                MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentPadding = PaddingValues(MaterialTheme.spacing.medium)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ShoppingCart,
-                            contentDescription = "cart icon",
-                            tint = Color(parseColor(darkVibrant))
-                        )
+                    coreVM.userDetails.value?.let { userDetails ->
 
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                        if (userDetails.userCartItems.map { it.snackTitle }.contains(myCart.snackTitle)) {
 
-                        Text(
-                            text = "Add To Cart",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                            Icon(
+                                imageVector = Icons.Outlined.Done,
+                                contentDescription = "done icon",
+                                tint = Color(parseColor(lightVibrant))
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(
+                                text = "Item already added to cart.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color(parseColor(lightVibrant))
+                            )
+
+                        } else {
+                            //  add to card button
+                            Button(
+                                onClick = {
+                                    //    add my cart item in firestore
+                                    detailsVM.onEvent(
+                                        DetailsEvents.UpdateCartItems(
+                                            email = userDetails.userEmail,
+                                            cart = Cart(
+                                                snackTitle = snackTitle,
+                                                snackCategory = snackCategory,
+                                                snackPrice = snack.snackPrice,
+                                                snackQuantity = detailsVM.itemQuantity.value,
+                                                snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
+                                            ),
+                                            isAdd = true,
+                                            response = {}
+                                        )
+                                    )
+                                },
+                                colors = ButtonDefaults.buttonColors(
+
+                                    containerColor = if (detailsVM.itemQuantity.value > 0)
+                                        Color(parseColor(lightVibrant))
+                                    else
+                                        MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f),
+
+                                    contentColor = if (detailsVM.itemQuantity.value > 0)
+                                        Color.White
+                                    else
+                                        MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                contentPadding = PaddingValues(MaterialTheme.spacing.medium)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.ShoppingCart,
+                                    contentDescription = "cart icon",
+                                    tint = Color(parseColor(darkVibrant))
+                                )
+
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
+                                Text(
+                                    text = "Add To Cart",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
                     }
                 }
 

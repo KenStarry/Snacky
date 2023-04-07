@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_details.domain.repository
 
+import com.kenstarry.snacky.core.domain.model.Cart
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.Snack
 
@@ -18,4 +19,52 @@ interface DetailsRepository {
         isAdd: Boolean,
         response: (response: Response<*>) -> Unit
     )
+
+    suspend fun updateCartItems(
+        email: String,
+        cart: Cart,
+        isAdd: Boolean,
+        response: (response: Response<*>) -> Unit
+    )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
