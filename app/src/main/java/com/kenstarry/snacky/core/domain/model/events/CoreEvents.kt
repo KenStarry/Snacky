@@ -5,6 +5,10 @@ import com.kenstarry.snacky.core.domain.model.User
 
 sealed class CoreEvents {
 
+    data class SetColorPalette(
+        val colors: Map<String, String>
+    ) : CoreEvents()
+
     data class GetUserDetails(
         val email: String,
         val onResponse: (response: Response<*>) -> Unit

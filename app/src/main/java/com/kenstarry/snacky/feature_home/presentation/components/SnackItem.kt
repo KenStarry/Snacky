@@ -2,6 +2,7 @@ package com.kenstarry.snacky.feature_home.presentation.components
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,7 +30,8 @@ import com.kenstarry.snacky.ui.theme.Poppins
 @Composable
 fun SnackItem(
     context: Context,
-    snack: Snack
+    snack: Snack,
+    onSnackClicked: () -> Unit
 ) {
 
     Card(
@@ -48,6 +50,7 @@ fun SnackItem(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable { onSnackClicked() }
                 .padding(MaterialTheme.spacing.medium),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally

@@ -21,6 +21,8 @@ import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
 import com.kenstarry.snacky.feature_home.presentation.components.PopularSection
 import com.kenstarry.snacky.feature_home.presentation.components.SearchSection
 import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
+import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.screens.Screen
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +35,8 @@ fun HomeScreen(
     val context = LocalContext.current
     val coreVM: CoreViewModel = hiltViewModel()
     val homeVM: HomeViewModel = hiltViewModel()
+    val direction = Direction(mainNavHostController)
+    val directionInner = Direction(innerNavHostController)
 
     val currentUser = coreVM.getCurrentUser()
 
@@ -88,8 +92,8 @@ fun HomeScreen(
                         //  hungry text
                         Text(
                             text = "hungry? Order Up!",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                         )
 
                         //  search bar
@@ -103,7 +107,14 @@ fun HomeScreen(
 
                         //  popular section
                         PopularSection(
-                            popularSnacks = homeVM.snacks.value
+                            popularSnacks = homeVM.snacks.value,
+                            onSnackClicked = {
+                                //  open details for that snack
+                                direction.navigateToRoute(
+                                    Screen.Details.passSnackTitle(it.snackName.title),
+                                    null
+                                )
+                            }
                         )
 
                     }

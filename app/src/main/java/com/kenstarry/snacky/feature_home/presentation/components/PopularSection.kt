@@ -18,7 +18,8 @@ import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun PopularSection(
-    popularSnacks: List<Snack>
+    popularSnacks: List<Snack>,
+    onSnackClicked: (snack: Snack) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -45,7 +46,10 @@ fun PopularSection(
                 items(popularSnacks) { snack ->
                     SnackItem(
                         context = context,
-                        snack = snack
+                        snack = snack,
+                        onSnackClicked = {
+                            onSnackClicked(snack)
+                        }
                     )
                 }
             },

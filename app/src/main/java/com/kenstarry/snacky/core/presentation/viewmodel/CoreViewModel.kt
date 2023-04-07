@@ -23,6 +23,9 @@ class CoreViewModel @Inject constructor(
     private val _currentUser = mutableStateOf<FirebaseUser?>(null)
     private val _isLoggedIn = mutableStateOf<Boolean>(false)
 
+    private val _colorPalette = mutableStateOf<Map<String, String>>(mapOf())
+    val colorPalette: State<Map<String, String>> = _colorPalette
+
     fun getCurrentUser(): FirebaseUser? {
         viewModelScope.launch {
             _currentUser.value = useCases.currentUser.invoke()
@@ -42,6 +45,11 @@ class CoreViewModel @Inject constructor(
     fun onEvent(event: CoreEvents) {
 
         when (event) {
+
+            is CoreEvents.SetColorPalette -> {
+                _colorPalette.value = event.colors
+            }
+
             is CoreEvents.GetUserDetails -> {
                 viewModelScope.launch {
                     useCases.getUserDetails(
