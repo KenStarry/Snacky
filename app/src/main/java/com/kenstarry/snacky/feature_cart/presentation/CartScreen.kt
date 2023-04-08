@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
@@ -59,6 +60,16 @@ fun CartScreen(
             ) {
 
                 coreVM.userDetails.value?.let { user ->
+
+                    //  title
+                    Text(
+                        text = "${user.userCartItems.size} snacks",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
 
                     //  cart items
                     CartItemsSection(cartItems = user.userCartItems)
