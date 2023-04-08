@@ -53,7 +53,7 @@ fun TopOfTheWeekSection(
         ) {
 
             Text(
-                text = "Top of the Week!",
+                text = "Top of the Week",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
             )
