@@ -38,7 +38,7 @@ fun HomeInnerGraph(
         }
 
         //  Cart screen
-        composable(route = BottomNavScreens.Cart.route) {
+        composable(route = BottomNavScreens.Cart().route) {
             CartScreen(
                 mainNavHostController = mainNavHostController,
                 innerNavHostController = innerNavHostController

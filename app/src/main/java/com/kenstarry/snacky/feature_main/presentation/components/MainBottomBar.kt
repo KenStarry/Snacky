@@ -12,15 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kenstarry.snacky.feature_cart.presentation.viewmodel.CartViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.bottom_nav_screens.BottomNavScreens
 import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun MainBottomBar(
-    innerNavHostController: NavHostController
+    innerNavHostController: NavHostController,
+    cartItemsCount: Int
 ) {
 
     val direction = Direction(innerNavHostController)
@@ -28,7 +31,7 @@ fun MainBottomBar(
     val screens = listOf(
         BottomNavScreens.Home,
         BottomNavScreens.Favourites,
-        BottomNavScreens.Cart,
+        BottomNavScreens.Cart(),
         BottomNavScreens.Settings,
     )
 
@@ -57,6 +60,7 @@ fun MainBottomBar(
                 MainBottomBarItem(
                     currentDestination = currentDestination,
                     screen = screen,
+                    cartItemsCount = cartItemsCount,
                     onBottomBarItemClicked = {
                         direction.navigateToRoute(
                             screen.route,

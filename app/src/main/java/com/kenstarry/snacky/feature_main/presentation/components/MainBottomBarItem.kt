@@ -4,17 +4,24 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import com.kenstarry.snacky.feature_cart.presentation.viewmodel.CartViewModel
+import com.kenstarry.snacky.navigation.NavConstants
 import com.kenstarry.snacky.navigation.screens.bottom_nav_screens.BottomNavScreens
+import org.checkerframework.common.subtyping.qual.Bottom
 
 @Composable
 fun RowScope.MainBottomBarItem(
     currentDestination: NavDestination?,
     screen: BottomNavScreens,
+    cartItemsCount: Int,
     onBottomBarItemClicked: () -> Unit
 ) {
+
+    val cartVM: CartViewModel = hiltViewModel()
 
     NavigationBarItem(
         selected = currentDestination?.hierarchy?.any {
@@ -33,10 +40,32 @@ fun RowScope.MainBottomBarItem(
         },
 
         icon = {
-            Icon(
-                imageVector = screen.icon,
-                contentDescription = "Bottom Nav Icon"
-            )
+            if (screen.route == NavConstants.CART_BOTTOM_NAV_ROUTE) {
+                val myCart = BottomNavScreens.Cart(cartItemsCount)
+                //  add a badge counter
+                BadgedBox(badge = {
+                    Badge(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ) {
+                        Text(
+                            text = myCart.badgeCount.toString(),
+                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                            fontWeight = MaterialTheme.typography.bodySmall.fontWeight
+                        )
+                    }
+                }) {
+                    Icon(
+                        imageVector = screen.icon,
+                        contentDescription = "Bottom Nav Icon"
+                    )
+                }
+            } else {
+                Icon(
+                    imageVector = screen.icon,
+                    contentDescription = "Bottom Nav Icon"
+                )
+            }
         },
 
         colors = NavigationBarItemDefaults.colors(

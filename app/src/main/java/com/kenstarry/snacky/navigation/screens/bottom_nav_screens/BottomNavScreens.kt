@@ -26,7 +26,7 @@ sealed class BottomNavScreens(
     )
 
     //  home screen
-    object Cart : BottomNavScreens(
+    data class Cart(val badgeCount: Int = 0) : BottomNavScreens(
         route = NavConstants.CART_BOTTOM_NAV_ROUTE,
         title = "My Cart",
         icon = Icons.Outlined.ShoppingCart

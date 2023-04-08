@@ -194,7 +194,8 @@ fun DetailsScreen(
 
                     coreVM.userDetails.value?.let { userDetails ->
 
-                        if (userDetails.userCartItems.map { it.snackTitle }.contains(myCart.snackTitle)) {
+                        if (userDetails.userCartItems.map { it.snackTitle }
+                                .contains(myCart.snackTitle)) {
 
                             Icon(
                                 imageVector = Icons.Outlined.Done,
@@ -214,7 +215,7 @@ fun DetailsScreen(
                             //  add to card button
                             Button(
                                 onClick = {
-                                    if (!userDetails.userCartItems.map { it.snackTitle }.contains(myCart.snackTitle)) {
+                                    if (detailsVM.itemQuantity.value > 0) {
                                         //    add my cart item in firestore
                                         detailsVM.onEvent(
                                             DetailsEvents.UpdateCartItems(
@@ -230,6 +231,12 @@ fun DetailsScreen(
                                                 response = {}
                                             )
                                         )
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Please select a quantity",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 },
                                 colors = ButtonDefaults.buttonColors(
@@ -254,14 +261,18 @@ fun DetailsScreen(
                                     tint = if (detailsVM.itemQuantity.value > 0)
                                         Color.White
                                     else
-                                        MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f)
+                                        MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                                 )
 
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
                                 Text(
                                     text = "Add To Cart",
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = if (detailsVM.itemQuantity.value > 0)
+                                        Color.White
+                                    else
+                                        MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                                 )
                             }
                         }

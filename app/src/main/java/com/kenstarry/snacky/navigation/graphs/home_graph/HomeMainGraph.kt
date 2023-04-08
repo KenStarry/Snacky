@@ -3,6 +3,7 @@ package com.kenstarry.snacky.navigation.graphs.home_graph
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.kenstarry.snacky.core.domain.model.Snack
+import com.kenstarry.snacky.core.domain.model.User
 import com.kenstarry.snacky.feature_details.presentation.DetailsScreen
 import com.kenstarry.snacky.feature_main.presentation.MainScreen
 import com.kenstarry.snacky.navigation.NavConstants
@@ -20,7 +21,9 @@ fun NavGraphBuilder.homeMainNavgraph(
 
         //  main screen
         composable(route = Screen.Main.route) {
-            MainScreen(mainNavHostController = mainNavHostController)
+            MainScreen(
+                mainNavHostController = mainNavHostController
+            )
         }
 
         //  details screen

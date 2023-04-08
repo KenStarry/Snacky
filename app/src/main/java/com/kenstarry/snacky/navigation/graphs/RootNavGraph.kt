@@ -3,6 +3,7 @@ package com.kenstarry.snacky.navigation.graphs
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.kenstarry.snacky.core.domain.model.User
 import com.kenstarry.snacky.navigation.NavConstants
 import com.kenstarry.snacky.navigation.graphs.authentication_graph.authNavGraph
 import com.kenstarry.snacky.navigation.graphs.home_graph.homeMainNavgraph

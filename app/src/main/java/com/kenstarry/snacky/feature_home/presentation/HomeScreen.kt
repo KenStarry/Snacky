@@ -76,7 +76,9 @@ fun HomeScreen(
                     HomeTopBar(
                         context = context,
                         userName = user.userName,
-                        imageUri = user.userImageUri
+                        imageUri = user.userImageUri,
+                        onSearchPressed = {},
+                        onImageClicked = {}
                     )
                 }
             ) { contentPadding ->
