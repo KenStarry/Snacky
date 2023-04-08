@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.kenstarry.snacky.R
@@ -52,22 +53,37 @@ fun HomeTopBar(
 
                 Text(
                     text = "Hi, $userName",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
 
             }
         },
         navigationIcon = {
             //  user image
-            CoilImage(
-                context = context,
-                imageUri = imageUri?.toUri(),
-                placeholder = R.drawable.profile,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(40.dp)
-                    .clickable { onImageClicked() }
-            )
+            if (imageUri == null || imageUri.isBlank()) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.profile),
+                    contentDescription = "profile image",
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(40.dp)
+                        .clickable { onImageClicked() }
+                )
+
+            } else {
+                CoilImage(
+                    context = context,
+                    imageUri = imageUri.toUri(),
+                    placeholder = R.drawable.profile,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(40.dp)
+                        .clickable { onImageClicked() }
+                )
+            }
         },
         actions = {
             IconButton(onClick = onSearchPressed) {

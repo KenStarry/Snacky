@@ -6,6 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kenstarry.snacky.R
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
+import com.kenstarry.snacky.core.presentation.components.CenterBackTopBar
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_cart.presentation.components.CartItemsSection
 import com.kenstarry.snacky.feature_cart.presentation.components.CartPromoCode
@@ -41,9 +46,13 @@ fun CartScreen(
 
     Scaffold(
         topBar = {
-            CartTopBar(title = "My Cart") {
-
-            }
+            CenterBackTopBar(
+                title = "My Cart",
+                titleIcon = Icons.Filled.ShoppingCart,
+                actions = arrayOf(Icons.Outlined.MoreVert),
+                onActionIconPressed = {},
+                onBackPressed = {}
+            )
         }
     ) { contentPadding ->
 
@@ -138,7 +147,7 @@ fun CartScreen(
                             modifier = Modifier
                                 .fillMaxSize(0.6f)
                         )
-                        
+
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                         Text(
