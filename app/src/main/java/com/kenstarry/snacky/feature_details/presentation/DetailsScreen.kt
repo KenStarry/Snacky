@@ -170,6 +170,9 @@ fun DetailsScreen(
                         primaryColor = MaterialTheme.colorScheme.primary
                     )
 
+                    //  more details
+
+
                     //  description
                     DetailsDescription(snackDescription = snack.snackDescription)
 
