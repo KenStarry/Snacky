@@ -9,10 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kenstarry.snacky.feature_cart.presentation.viewmodel.CartViewModel
 import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun CartSummary() {
+
+    val cartVM: CartViewModel = viewModel()
 
     Column(
         modifier = Modifier
@@ -42,7 +46,7 @@ fun CartSummary() {
 
             //  subtotal
             Text(
-                text = "Ksh. 895",
+                text = cartVM.subTotalPrice.value.toString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
             )

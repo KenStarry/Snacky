@@ -19,9 +19,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kenstarry.snacky.R
 import com.kenstarry.snacky.core.domain.model.Cart
 import com.kenstarry.snacky.core.presentation.components.CoilImage
+import com.kenstarry.snacky.feature_cart.domain.model.CartEvents
+import com.kenstarry.snacky.feature_cart.presentation.viewmodel.CartViewModel
 import com.kenstarry.snacky.feature_details.presentation.components.CardButton
 import com.kenstarry.snacky.ui.custom.spacing
 import com.kenstarry.snacky.ui.theme.Poppins
@@ -35,6 +40,7 @@ fun SnackCartItem(
 ) {
 
     val context = LocalContext.current
+    val cartVM: CartViewModel = viewModel()
 
     cart.let {
 
@@ -162,7 +168,9 @@ fun SnackCartItem(
                             withStyle(
                                 style = SpanStyle(
                                     fontFamily = Poppins,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                                        alpha = 0.8f
+                                    ),
                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                                     fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
                                 )
@@ -185,7 +193,16 @@ fun SnackCartItem(
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 primaryColor = Color.White,
                                 onClick = {
-                                    quantity -= 1
+                                    if (quantity > 0) {
+
+                                        quantity -= 1
+                                        totalPrice -= it.snack.snackPrice
+
+                                        cartVM.onEvent(CartEvents.UpdateSubTotal(
+                                            priceToAdd = it.snack.snackPrice,
+                                            isAdd = false
+                                        ))
+                                    }
                                 }
                             )
 
@@ -204,6 +221,12 @@ fun SnackCartItem(
                                 primaryColor = Color.White,
                                 onClick = {
                                     quantity += 1
+                                    totalPrice += it.snack.snackPrice
+
+                                    cartVM.onEvent(CartEvents.UpdateSubTotal(
+                                        priceToAdd = it.snack.snackPrice,
+                                        isAdd = true
+                                    ))
                                 }
                             )
                         }
