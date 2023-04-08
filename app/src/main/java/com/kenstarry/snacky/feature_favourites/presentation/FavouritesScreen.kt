@@ -24,7 +24,9 @@ import com.kenstarry.snacky.R
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.components.CenterBackTopBar
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
+import com.kenstarry.snacky.feature_favourites.presentation.components.FavouriteSnacks
 import com.kenstarry.snacky.feature_favourites.presentation.components.SortTitleSection
+import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +37,7 @@ fun FavouritesScreen(
 ) {
 
     val coreVM: CoreViewModel = hiltViewModel()
+    val direction = Direction(mainNavHostController)
 
     val currentUser = coreVM.getCurrentUser()
     coreVM.onEvent(CoreEvents.GetUserDetails(
@@ -53,65 +56,70 @@ fun FavouritesScreen(
         }
     ) { contentPadding ->
 
-     Box(
-         modifier = Modifier
-             .fillMaxSize()
-             .background(MaterialTheme.colorScheme.onPrimary)
-             .padding(contentPadding)
-     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.onPrimary)
+                .padding(contentPadding)
+        ) {
 
-         coreVM.userDetails.value?.let { user ->
+            coreVM.userDetails.value?.let { user ->
 
-             // main content
-             AnimatedVisibility(visible = user.userSnackFavourites.isNotEmpty()) {
-                 Column(
-                     modifier = Modifier
-                         .fillMaxSize()
-                         .background(MaterialTheme.colorScheme.onPrimary)
-                         .padding(MaterialTheme.spacing.medium)
-                 ) {
+                // main content
+                AnimatedVisibility(visible = user.userSnackFavourites.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.onPrimary)
+                            .padding(MaterialTheme.spacing.medium),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
+                    ) {
 
-                     // sort title
-                     SortTitleSection()
+                        // sort title
+                        SortTitleSection()
 
-                     // sorted items
+                        // favourite items
+                        FavouriteSnacks(
+                            direction = direction,
+                            email = user.userEmail,
+                            favouriteSnacks = user.userSnackFavourites
+                        )
 
+                    }
+                }
 
-                 }
-             }
+                // blank message
+                AnimatedVisibility(visible = user.userSnackFavourites.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.onPrimary)
+                            .padding(MaterialTheme.spacing.medium),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
 
-             // blank message
-             AnimatedVisibility(visible = user.userSnackFavourites.isEmpty()) {
-                 Column(
-                     modifier = Modifier
-                         .fillMaxSize()
-                         .background(MaterialTheme.colorScheme.onPrimary)
-                         .padding(MaterialTheme.spacing.medium),
-                     horizontalAlignment = Alignment.CenterHorizontally,
-                     verticalArrangement = Arrangement.Center
-                 ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.undraw_favourite),
+                            contentDescription = "favourite",
+                            modifier = Modifier
+                                .fillMaxSize(0.6f)
+                        )
 
-                     Image(
-                         painter = painterResource(id = R.drawable.undraw_favourite),
-                         contentDescription = "favourite",
-                         modifier = Modifier
-                             .fillMaxSize(0.6f)
-                     )
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                        Text(
+                            text = "All your favourite snacks appear here!",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                        )
 
-                     Text(
-                         text = "All your favourite snacks appear here!",
-                         style = MaterialTheme.typography.bodyMedium,
-                         color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
-                     )
+                    }
+                }
 
-                 }
-             }
+            }
 
-         }
-
-     }
+        }
     }
 
 }
