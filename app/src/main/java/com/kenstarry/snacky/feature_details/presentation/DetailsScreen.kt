@@ -1,6 +1,7 @@
 package com.kenstarry.snacky.feature_details.presentation
 
 import android.graphics.Color.parseColor
+import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -171,10 +172,12 @@ fun DetailsScreen(
                     )
 
                     //  more details
-
+                    DetailsMiscellaneous(snack = snack)
 
                     //  description
                     DetailsDescription(snackDescription = snack.snackDescription)
+                    
+                    Spacer(modifier = Modifier.height(64.dp))
 
                 }
 
@@ -213,7 +216,7 @@ fun DetailsScreen(
                             )
 
                         } else {
-                            //  add to card button
+                            //  add to cart button
                             Button(
                                 onClick = {
                                     if (detailsVM.itemQuantity.value > 0) {
@@ -243,7 +246,7 @@ fun DetailsScreen(
                                     containerColor = if (detailsVM.itemQuantity.value > 0)
                                         MaterialTheme.colorScheme.primary
                                     else
-                                        MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f),
+                                        Color.Gray,
 
                                     contentColor = if (detailsVM.itemQuantity.value > 0)
                                         Color.White
