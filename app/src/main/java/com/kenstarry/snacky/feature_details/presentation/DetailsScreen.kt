@@ -185,17 +185,15 @@ fun DetailsScreen(
                 ) {
 
                     val myCart = Cart(
-                        snackTitle = snackTitle,
-                        snackCategory = snackCategory,
-                        snackPrice = snack.snackPrice,
+                        snack = snack,
                         snackQuantity = detailsVM.itemQuantity.value,
                         snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
                     )
 
                     coreVM.userDetails.value?.let { userDetails ->
 
-                        if (userDetails.userCartItems.map { it.snackTitle }
-                                .contains(myCart.snackTitle)) {
+                        if (userDetails.userCartItems.map { it.snack.snackName.title }
+                                .contains(myCart.snack.snackName.title)) {
 
                             Icon(
                                 imageVector = Icons.Outlined.Done,
@@ -221,9 +219,7 @@ fun DetailsScreen(
                                             DetailsEvents.UpdateCartItems(
                                                 email = userDetails.userEmail,
                                                 cart = Cart(
-                                                    snackTitle = snackTitle,
-                                                    snackCategory = snackCategory,
-                                                    snackPrice = snack.snackPrice,
+                                                    snack = snack,
                                                     snackQuantity = detailsVM.itemQuantity.value,
                                                     snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
                                                 ),

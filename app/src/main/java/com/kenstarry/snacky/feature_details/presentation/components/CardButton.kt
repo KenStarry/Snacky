@@ -14,23 +14,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardButton(
+    size: Dp = 45.dp,
     icon: ImageVector,
+    containerColor: Color = MaterialTheme.colorScheme.onSecondary,
     primaryColor: Color,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
-            .size(45.dp),
+            .size(size),
         shape = RoundedCornerShape(MaterialTheme.spacing.medium),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.onSecondary,
-            contentColor = MaterialTheme.colorScheme.onSecondary
+            containerColor = containerColor,
+            contentColor = containerColor
         )
     ) {
 

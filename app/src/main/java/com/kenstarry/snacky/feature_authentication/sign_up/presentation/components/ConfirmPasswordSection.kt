@@ -45,7 +45,9 @@ fun ConfirmPasswordSection(
             isPassword = true,
             onInput = {
                 signUpVM.onFormEvent(RegistrationFormEvents.OnConfirmPasswordChanged(it))
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         AnimatedVisibility(visible = signUpVM.formState.confirmPasswordError != null) {

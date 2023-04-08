@@ -42,7 +42,9 @@ fun UsernameSection(
             tertiaryColor = MaterialTheme.colorScheme.tertiary,
             onInput = {
                 signUpVM.onFormEvent(RegistrationFormEvents.OnUsernameChanged(it))
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         AnimatedVisibility(visible = signUpVM.formState.usernameError != null) {

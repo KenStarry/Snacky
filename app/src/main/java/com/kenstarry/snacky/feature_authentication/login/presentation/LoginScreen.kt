@@ -131,7 +131,9 @@ fun LoginScreen(
                 tertiaryColor = MaterialTheme.colorScheme.tertiary,
                 onInput = {
                     loginVM.onFormEvent(LoginFormEvents.OnLoginEmailChanged(it))
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
             )
 
             //  Password
@@ -147,7 +149,9 @@ fun LoginScreen(
                 isPassword = true,
                 onInput = {
                     loginVM.onFormEvent(LoginFormEvents.OnLoginPasswordChanged(it))
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
             )
 
             //  login button

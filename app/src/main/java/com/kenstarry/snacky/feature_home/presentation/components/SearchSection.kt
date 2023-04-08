@@ -44,7 +44,9 @@ fun SearchSection() {
                 keyboardType = KeyboardType.Text,
                 primaryColor = MaterialTheme.colorScheme.primary,
                 tertiaryColor = MaterialTheme.colorScheme.tertiary,
-                onInput = {}
+                onInput = {},
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         }
 

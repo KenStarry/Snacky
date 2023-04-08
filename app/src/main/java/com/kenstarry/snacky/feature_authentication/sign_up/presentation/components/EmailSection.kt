@@ -43,7 +43,9 @@ fun EmailSection(
             tertiaryColor = MaterialTheme.colorScheme.tertiary,
             onInput = {
                 signUpVM.onFormEvent(RegistrationFormEvents.OnEmailChanged(it))
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         AnimatedVisibility(visible = signUpVM.formState.emailError != null) {

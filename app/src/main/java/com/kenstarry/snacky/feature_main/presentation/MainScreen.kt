@@ -1,17 +1,19 @@
 package com.kenstarry.snacky.feature_main.presentation
 
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -24,7 +26,7 @@ import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.graphs.home_graph.HomeInnerGraph
 import com.kenstarry.snacky.ui.custom.spacing
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun MainScreen(
     mainNavHostController: NavHostController
@@ -33,6 +35,25 @@ fun MainScreen(
     val coreVM: CoreViewModel = hiltViewModel()
     val navController = rememberNavController()
     val context = LocalContext.current
+    val view = LocalView.current
+
+    var isKeyboardVisible by remember {
+        mutableStateOf(false)
+    }
+
+    //  hide bottom bar on Soft input
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            isKeyboardVisible  = ViewCompat.getRootWindowInsets(view)
+                ?.isVisible(WindowInsetsCompat.Type.ime()) ?: true
+        }
+
+        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
+
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
 
     //  get user details
     val currentUser = coreVM.getCurrentUser()
@@ -49,11 +70,12 @@ fun MainScreen(
 
         Scaffold(
             bottomBar = {
-                MainBottomBar(
-                    innerNavHostController = navController,
-                    cartItemsCount =
-                    coreVM.userDetails.value?.userCartItems?.size ?: 0
-                )
+                if (!isKeyboardVisible) {
+                    MainBottomBar(
+                        innerNavHostController = navController,
+                        cartItemsCount = coreVM.userDetails.value?.userCartItems?.size ?: 0
+                    )
+                }
             }
         ) { contentPadding ->
 

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTextField(
+    modifier: Modifier = Modifier,
     textFieldValue: String = "",
     startIcon: ImageVector?,
     endIcon: ImageVector?,
@@ -57,8 +58,7 @@ fun CustomTextField(
         Icons.Outlined.VisibilityOff
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -103,7 +103,7 @@ fun CustomTextField(
                 singleLine = singleLine,
 
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = containerColor,
                     cursorColor = primaryColor,
                     unfocusedIndicatorColor = tertiaryColor,
                     focusedIndicatorColor = primaryColor
@@ -153,7 +153,7 @@ fun CustomTextField(
                 singleLine = singleLine,
 
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = containerColor,
                     cursorColor = primaryColor,
                     unfocusedIndicatorColor = tertiaryColor,
                     focusedIndicatorColor = primaryColor

@@ -44,7 +44,9 @@ fun PasswordSection(
             isPassword = true,
             onInput = {
                 signUpVM.onFormEvent(RegistrationFormEvents.OnPasswordChanged(it))
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         AnimatedVisibility(visible = signUpVM.formState.passwordError != null) {
