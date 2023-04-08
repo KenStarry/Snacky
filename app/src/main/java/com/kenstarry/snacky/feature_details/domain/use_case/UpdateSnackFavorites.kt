@@ -1,6 +1,7 @@
 package com.kenstarry.snacky.feature_details.domain.use_case
 
 import com.kenstarry.snacky.core.domain.model.Response
+import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.feature_details.domain.repository.DetailsRepository
 
 class UpdateSnackFavorites(
@@ -8,8 +9,8 @@ class UpdateSnackFavorites(
 ) {
     suspend operator fun invoke(
         email: String,
-        snackTitle: String,
+        snack: Snack,
         isAdd: Boolean,
         response: (response: Response<*>) -> Unit
-    ) = repository.updateSnackFavorites(email, snackTitle, isAdd, response)
+    ) = repository.updateSnackFavorites(email, snack, isAdd, response)
 }

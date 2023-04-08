@@ -90,7 +90,7 @@ fun TopOfTheWeekSection(
                 items(topSnacks) { snack ->
 
                     val isFavouriteSnack = userDetails.userSnackFavourites
-                        .contains(snack.snackName.title)
+                        .contains(snack)
 
                     SnackItemAlt(
                         context = context,
@@ -102,7 +102,7 @@ fun TopOfTheWeekSection(
                                 detailsVM.onEvent(
                                     DetailsEvents.UpdateSnackFavorites(
                                         email = userDetails.userEmail,
-                                        snackTitle = snack.snackName.title,
+                                        snack = snack,
                                         isAdd = false,
                                         response = {}
                                     ))
@@ -110,7 +110,7 @@ fun TopOfTheWeekSection(
                                 detailsVM.onEvent(
                                     DetailsEvents.UpdateSnackFavorites(
                                         email = userDetails.userEmail,
-                                        snackTitle = snack.snackName.title,
+                                        snack = snack,
                                         isAdd = true,
                                         response = {}
                                     ))

@@ -71,14 +71,14 @@ fun DetailsScreen(
         }
     ))
 
-    coreVM.userDetails.value?.let {
-        //  set the favourites list
-        if (it.userSnackFavourites.contains(snackTitle)) {
-            detailsVM.onEvent(DetailsEvents.ToggleFavoritesButton(true))
-        }
-    }
-
     detailsVM.snack.value?.let { snack ->
+
+        coreVM.userDetails.value?.let {
+            //  set the favourites list
+            if (it.userSnackFavourites.contains(snack)) {
+                detailsVM.onEvent(DetailsEvents.ToggleFavoritesButton(true))
+            }
+        }
 
         Scaffold(
             topBar = {
@@ -130,7 +130,7 @@ fun DetailsScreen(
                             currentUser?.email?.let {
                                 detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
                                     email = it,
-                                    snackTitle = snackTitle,
+                                    snack = snack,
                                     isAdd = detailsVM.isFavoriteToggled.value,
                                     response = { res ->
                                         when (res) {

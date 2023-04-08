@@ -87,7 +87,7 @@ fun PopularSection(
                 items(popularSnacks) { snack ->
 
                     val isFavouriteSnack = userDetails.userSnackFavourites
-                        .contains(snack.snackName.title)
+                        .contains(snack)
 
                     SnackItem(
                         context = context,
@@ -101,14 +101,14 @@ fun PopularSection(
                             if (isFavouriteSnack) {
                                 detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
                                     email = userDetails.userEmail,
-                                    snackTitle = snack.snackName.title,
+                                    snack = snack,
                                     isAdd = false,
                                     response = {}
                                 ))
                             } else {
                                 detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
                                     email = userDetails.userEmail,
-                                    snackTitle = snack.snackName.title,
+                                    snack = snack,
                                     isAdd = true,
                                     response = {}
                                 ))

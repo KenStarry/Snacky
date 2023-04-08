@@ -43,7 +43,7 @@ class DetailsViewModel @Inject constructor(
                 viewModelScope.launch {
                     useCases.updateSnackFavorites(
                         email = event.email,
-                        snackTitle = event.snackTitle,
+                        snack = event.snack,
                         isAdd = event.isAdd,
                         response = event.response
                     )

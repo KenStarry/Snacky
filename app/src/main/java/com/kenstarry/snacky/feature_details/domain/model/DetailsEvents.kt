@@ -14,7 +14,7 @@ sealed class DetailsEvents {
 
     data class UpdateSnackFavorites(
         val email: String,
-        val snackTitle: String,
+        val snack: Snack,
         val isAdd: Boolean,
         val response: (response: Response<*>) -> Unit
     ) : DetailsEvents()

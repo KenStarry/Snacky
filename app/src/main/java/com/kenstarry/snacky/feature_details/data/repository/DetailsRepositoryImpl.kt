@@ -42,7 +42,7 @@ class DetailsRepositoryImpl @Inject constructor(
 
     override suspend fun updateSnackFavorites(
         email: String,
-        snackTitle: String,
+        snack: Snack,
         isAdd: Boolean,
         response: (response: Response<*>) -> Unit
     ) {
@@ -52,11 +52,11 @@ class DetailsRepositoryImpl @Inject constructor(
                 .document(email)
 
             if (isAdd) {
-                collectionRef.update("userSnackFavourites", FieldValue.arrayUnion(snackTitle))
+                collectionRef.update("userSnackFavourites", FieldValue.arrayUnion(snack))
                     .addOnSuccessListener { response(Response.Success(true)) }
                     .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
             } else {
-                collectionRef.update("userSnackFavourites", FieldValue.arrayRemove(snackTitle))
+                collectionRef.update("userSnackFavourites", FieldValue.arrayRemove(snack))
                     .addOnSuccessListener { response(Response.Success(true)) }
                     .addOnFailureListener { response(Response.Failure(it.localizedMessage)) }
             }

@@ -15,7 +15,7 @@ interface DetailsRepository {
 
     suspend fun updateSnackFavorites(
         email: String,
-        snackTitle: String,
+        snack: Snack,
         isAdd: Boolean,
         response: (response: Response<*>) -> Unit
     )
