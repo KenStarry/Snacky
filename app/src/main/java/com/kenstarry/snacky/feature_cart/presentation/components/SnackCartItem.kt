@@ -1,5 +1,6 @@
 package com.kenstarry.snacky.feature_cart.presentation.components
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +37,8 @@ import com.kenstarry.snacky.ui.theme.Poppins
 fun SnackCartItem(
     modifier: Modifier = Modifier,
     cart: Cart,
-    onSnackClicked: () -> Unit
+    onSnackClicked: () -> Unit,
+    onRemoveFromCart: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -52,188 +54,224 @@ fun SnackCartItem(
             mutableStateOf(it.snackTotalPrice)
         }
 
-        Card(
-            modifier = modifier,
-            shape = RoundedCornerShape(MaterialTheme.spacing.medium),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 0.dp
-            ),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.onSecondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary
-            )
+        Column(
+            modifier = Modifier
+                .wrapContentSize(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { onSnackClicked() },
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-                verticalAlignment = Alignment.CenterVertically
+            Card(
+                modifier = modifier,
+                shape = RoundedCornerShape(MaterialTheme.spacing.medium),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 0.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onSecondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
             ) {
-
-                //  image
-                Box(
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .wrapContentHeight(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .clickable { onSnackClicked() },
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    CoilImage(
-                        context = context,
-                        imageUri = it.snack.snackImageUrl.toUri(),
-                        placeholder = R.drawable.undraw_ice_cream_s_2_rh,
+                    //  image
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp),
-                        contentScale = ContentScale.Fit
-                    )
-
-                }
-
-                //  content
-                Column(
-                    modifier = Modifier
-                        .weight(2f)
-                        .wrapContentHeight()
-                        .padding(MaterialTheme.spacing.medium),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.SpaceEvenly
-                ) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            .weight(1f)
+                            .wrapContentHeight(),
+                        contentAlignment = Alignment.Center
                     ) {
 
-                        //  snack name
-                        Text(
-                            text = it.snack.snackName.title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                        CoilImage(
+                            context = context,
+                            imageUri = it.snack.snackImageUrl.toUri(),
+                            placeholder = R.drawable.undraw_ice_cream_s_2_rh,
                             modifier = Modifier
-                                .weight(2f)
+                                .fillMaxWidth()
+                                .height(120.dp),
+                            contentScale = ContentScale.Fit
                         )
 
-                        //  total price to pay
+                    }
+
+                    //  content
+                    Column(
+                        modifier = Modifier
+                            .weight(2f)
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.medium),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            //  snack name
+                            Text(
+                                text = it.snack.snackName.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .weight(2f)
+                            )
+
+                            //  total price to pay
+                            Text(
+                                text = "ksh. $totalPrice",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .weight(1f)
+                            )
+
+                        }
+
+                        //  snack description
                         Text(
-                            text = "ksh. $totalPrice",
+                            text = it.snack.snackDescription,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .weight(1f)
+                            overflow = TextOverflow.Ellipsis
                         )
 
-                    }
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-                    //  snack description
-                    Text(
-                        text = it.snack.snackDescription,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-                    //  pricing
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Text(text = buildAnnotatedString {
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontFamily = Poppins,
-                                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                                    fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            ) {
-                                append("Ksh. ")
-                            }
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontFamily = Poppins,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(
-                                        alpha = 0.8f
-                                    ),
-                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                    fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
-                                )
-                            ) {
-                                append(it.snack.snackPrice.toString())
-                            }
-                        })
-
-                        //  counter buttons
+                        //  pricing
                         Row(
                             modifier = Modifier
-                                .wrapContentSize(),
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            //  minus button
-                            CardButton(
-                                size = 35.dp,
-                                icon = Icons.Outlined.Minimize,
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                primaryColor = Color.White,
-                                onClick = {
-                                    if (quantity > 0) {
 
-                                        quantity -= 1
-                                        totalPrice -= it.snack.snackPrice
+                            Text(text = buildAnnotatedString {
 
-                                        cartVM.onEvent(CartEvents.UpdateSubTotal(
-                                            priceToAdd = it.snack.snackPrice,
-                                            isAdd = false
-                                        ))
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontFamily = Poppins,
+                                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                                        fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                ) {
+                                    append("Ksh. ")
+                                }
+
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontFamily = Poppins,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                                            alpha = 0.8f
+                                        ),
+                                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                        fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
+                                    )
+                                ) {
+                                    append(it.snack.snackPrice.toString())
+                                }
+                            })
+
+                            //  counter buttons
+                            Row(
+                                modifier = Modifier
+                                    .wrapContentSize(),
+                                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                //  minus button
+                                CardButton(
+                                    size = 35.dp,
+                                    icon = Icons.Outlined.Minimize,
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    primaryColor = Color.White,
+                                    onClick = {
+                                        if (quantity > 0) {
+
+                                            quantity -= 1
+                                            totalPrice -= it.snack.snackPrice
+
+                                            cartVM.onEvent(
+                                                CartEvents.UpdateSubTotal(
+                                                    priceToAdd = it.snack.snackPrice,
+                                                    isAdd = false
+                                                )
+                                            )
+                                        }
                                     }
-                                }
-                            )
+                                )
 
-                            //  counter
-                            Text(
-                                text = quantity.toString(),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
-                            )
+                                //  counter
+                                Text(
+                                    text = quantity.toString(),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                                        alpha = 0.8f
+                                    )
+                                )
 
-                            //  add button
-                            CardButton(
-                                size = 35.dp,
-                                icon = Icons.Outlined.Add,
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                primaryColor = Color.White,
-                                onClick = {
-                                    quantity += 1
-                                    totalPrice += it.snack.snackPrice
+                                //  add button
+                                CardButton(
+                                    size = 35.dp,
+                                    icon = Icons.Outlined.Add,
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    primaryColor = Color.White,
+                                    onClick = {
+                                        quantity += 1
+                                        totalPrice += it.snack.snackPrice
 
-                                    cartVM.onEvent(CartEvents.UpdateSubTotal(
-                                        priceToAdd = it.snack.snackPrice,
-                                        isAdd = true
-                                    ))
-                                }
-                            )
+                                        cartVM.onEvent(
+                                            CartEvents.UpdateSubTotal(
+                                                priceToAdd = it.snack.snackPrice,
+                                                isAdd = true
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+
                         }
 
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                     }
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                }
+            }
+
+            //  delete item from cart button
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                TextButton(
+                    onClick = onRemoveFromCart,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(
+                        text = "Remove item",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
             }

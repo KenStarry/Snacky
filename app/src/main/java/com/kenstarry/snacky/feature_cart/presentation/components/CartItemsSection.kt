@@ -27,11 +27,13 @@ import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun CartItemsSection(
-    cartItems: List<Cart>
+    cartItems: List<Cart>,
+    email: String
 ) {
 
     val listState = rememberLazyListState()
     val detailsVM: DetailsViewModel = hiltViewModel()
+    val context = LocalContext.current
     val cartVM: CartViewModel = viewModel()
 
     var total = 0
@@ -44,7 +46,8 @@ fun CartItemsSection(
         cartVM.onEvent(
             CartEvents.SetSubTotal(
                 priceToSet = total
-            ))
+            )
+        )
     }
 
     LazyColumn(
@@ -53,7 +56,33 @@ fun CartItemsSection(
 
                 SnackCartItem(
                     cart = cart,
-                    onSnackClicked = {}
+                    onSnackClicked = {},
+                    onRemoveFromCart = {
+                        detailsVM.onEvent(DetailsEvents.UpdateCartItems(
+                            email = email,
+                            cart = cart,
+                            isAdd = false,
+                            response = { res ->
+                                when (res) {
+                                    is Response.Success -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Item removed successfully",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    is Response.Failure -> {
+                                        Toast.makeText(
+                                            context,
+                                            "something went wrong",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        ))
+                    }
                 )
             }
         },
