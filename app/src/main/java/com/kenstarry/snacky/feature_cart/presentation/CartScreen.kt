@@ -4,17 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_cart.presentation.components.CartItemsSection
 import com.kenstarry.snacky.feature_cart.presentation.components.CartPromoCode
+import com.kenstarry.snacky.feature_cart.presentation.components.CartSummary
 import com.kenstarry.snacky.feature_cart.presentation.components.CartTopBar
 import com.kenstarry.snacky.ui.custom.spacing
 
@@ -63,6 +65,42 @@ fun CartScreen(
 
                     //  promo code
                     CartPromoCode()
+
+                    //  add to cart summary
+                    CartSummary()
+
+                    //  checkout button
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Button(
+                            onClick = { /*TODO*/ },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = Color.White
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = MaterialTheme.spacing.large,
+                                    ambientColor = MaterialTheme.colorScheme.primary,
+                                    spotColor = MaterialTheme.colorScheme.primary
+                                ),
+                            contentPadding = PaddingValues(MaterialTheme.spacing.medium)
+                        ) {
+
+                            Text(
+                                text = "Proceed to checkout",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                        }
+
+                    }
                 }
 
             }
