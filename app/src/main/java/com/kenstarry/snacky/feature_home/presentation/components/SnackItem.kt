@@ -6,8 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Fireplace
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -31,13 +33,15 @@ import com.kenstarry.snacky.ui.theme.Poppins
 fun SnackItem(
     context: Context,
     snack: Snack,
-    onSnackClicked: () -> Unit
+    isFavourite: Boolean,
+    onSnackClicked: () -> Unit,
+    onFavoriteClicked: () -> Unit
 ) {
 
     Card(
         modifier = Modifier
             .width(200.dp)
-            .height(280.dp),
+            .height(250.dp),
         shape = RoundedCornerShape(MaterialTheme.spacing.medium),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -66,15 +70,21 @@ fun SnackItem(
                 //  snack title
                 Text(
                     text = snack.snackName.title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                    maxLines = 1,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 //  snack sub title
                 Text(
                     text = snack.snackName.subTitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f)
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f),
+                    maxLines = 2,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis
                 )
 
             }
@@ -84,12 +94,14 @@ fun SnackItem(
                 context = context,
                 imageUri = snack.snackImageUrl.toUri(),
                 placeholder = R.drawable.undraw_ice_cream_s_2_rh,
-                contentScale = ContentScale.None,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(110.dp)
             )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             //  calories
             Row(
@@ -100,9 +112,11 @@ fun SnackItem(
             ) {
 
                 Icon(
-                    imageVector = Icons.Outlined.Fireplace,
+                    imageVector = Icons.Outlined.FireExtinguisher,
                     contentDescription = "Calories",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .size(MaterialTheme.spacing.medium)
                 )
 
                 Text(
@@ -147,20 +161,15 @@ fun SnackItem(
                     }
                 })
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
-                        .size(45.dp)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-
+                IconButton(onClick = onFavoriteClicked) {
                     Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = "Add icon",
-                        tint = Color.White
+                        imageVector = if (isFavourite)
+                            Icons.Filled.Favorite
+                        else
+                            Icons.Outlined.FavoriteBorder,
+                        contentDescription = "favourite icon",
+                        tint = MaterialTheme.colorScheme.primary
                     )
-
                 }
 
             }

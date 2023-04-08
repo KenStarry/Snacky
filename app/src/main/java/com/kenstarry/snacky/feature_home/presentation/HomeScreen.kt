@@ -2,6 +2,8 @@ package com.kenstarry.snacky.feature_home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,6 +21,7 @@ import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
 import com.kenstarry.snacky.feature_home.presentation.components.CategoriesSection
 import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
 import com.kenstarry.snacky.feature_home.presentation.components.PopularSection
+import com.kenstarry.snacky.feature_home.presentation.components.TopOfTheWeekSection
 import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.Screen
@@ -88,6 +91,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.onPrimary)
+                            .verticalScroll(rememberScrollState())
                             .padding(
                                 horizontal = MaterialTheme.spacing.medium,
                                 vertical = MaterialTheme.spacing.small
@@ -113,7 +117,24 @@ fun HomeScreen(
 
                         //  popular section
                         PopularSection(
+                            userDetails = user,
                             popularSnacks = homeVM.snacks.value,
+                            onSnackClicked = {
+                                //  open details for that snack
+                                direction.navigateToRoute(
+                                    Screen.Details.passSnackTitleAndCategory(
+                                        it.snackCategory,
+                                        it.snackName.title
+                                    ),
+                                    null
+                                )
+                            }
+                        )
+
+                        //  top of the week
+                        TopOfTheWeekSection(
+                            userDetails = user,
+                            topSnacks = homeVM.snacks.value,
                             onSnackClicked = {
                                 //  open details for that snack
                                 direction.navigateToRoute(

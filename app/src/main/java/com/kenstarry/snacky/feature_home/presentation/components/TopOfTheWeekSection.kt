@@ -1,18 +1,21 @@
 package com.kenstarry.snacky.feature_home.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,9 +26,9 @@ import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewMo
 import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
-fun PopularSection(
+fun TopOfTheWeekSection(
     userDetails: User,
-    popularSnacks: List<Snack>,
+    topSnacks: List<Snack>,
     onSnackClicked: (snack: Snack) -> Unit
 ) {
 
@@ -50,7 +53,7 @@ fun PopularSection(
         ) {
 
             Text(
-                text = "Popular",
+                text = "Top of the Week!",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
             )
@@ -82,50 +85,62 @@ fun PopularSection(
         }
 
         //  popular items
-        LazyRow(
+        LazyColumn(
             content = {
-                items(popularSnacks) { snack ->
+                items(topSnacks) { snack ->
 
                     val isFavouriteSnack = userDetails.userSnackFavourites
                         .contains(snack.snackName.title)
 
-                    SnackItem(
+                    SnackItemAlt(
                         context = context,
                         snack = snack,
                         isFavourite = isFavouriteSnack,
-                        onSnackClicked = {
-                            onSnackClicked(snack)
-                        },
                         onFavoriteClicked = {
                             //  if is favourite
                             if (isFavouriteSnack) {
-                                detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
-                                    email = userDetails.userEmail,
-                                    snackTitle = snack.snackName.title,
-                                    isAdd = false,
-                                    response = {}
-                                ))
+                                detailsVM.onEvent(
+                                    DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snackTitle = snack.snackName.title,
+                                        isAdd = false,
+                                        response = {}
+                                    ))
                             } else {
-                                detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
-                                    email = userDetails.userEmail,
-                                    snackTitle = snack.snackName.title,
-                                    isAdd = true,
-                                    response = {}
-                                ))
+                                detailsVM.onEvent(
+                                    DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snackTitle = snack.snackName.title,
+                                        isAdd = true,
+                                        response = {}
+                                    ))
                             }
-                        }
+                        },
+                        onSnackClicked = {
+                            onSnackClicked(snack)
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .background(MaterialTheme.colorScheme.onSecondary)
                     )
                 }
             },
             state = listState,
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+                .height(500.dp),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         )
 
     }
 }
+
+
+
+
+
 
 
 

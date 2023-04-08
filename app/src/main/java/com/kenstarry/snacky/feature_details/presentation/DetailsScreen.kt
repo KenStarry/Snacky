@@ -78,64 +78,7 @@ fun DetailsScreen(
         }
     }
 
-    var vibrant by remember { mutableStateOf("#000000") }
-    var darkVibrant by remember { mutableStateOf("#000000") }
-    var onDarkVibrant by remember { mutableStateOf("#000000") }
-    var lightVibrant by remember { mutableStateOf("#000000") }
-    var dominantSwatch by remember { mutableStateOf("#000000") }
-    var mutedSwatch by remember { mutableStateOf("#000000") }
-    var lightMutedSwatch by remember { mutableStateOf("#000000") }
-    var darkMutedSwatch by remember { mutableStateOf("#000000") }
-
-    var launchedEffectTriggered by remember {
-        mutableStateOf(false)
-    }
-
     detailsVM.snack.value?.let { snack ->
-
-        LaunchedEffect(key1 = launchedEffectTriggered) {
-
-            try {
-
-                val bitmap = PaletteGenerator.convertImageToBitmap(
-                    imageUrl = snack.snackImageUrl,
-                    context = context
-                )
-
-                if (bitmap != null) {
-                    launchedEffectTriggered = true
-
-                    coreVM.onEvent(
-                        CoreEvents.SetColorPalette(
-                            colors = PaletteGenerator.extractColorsFromBitmap(
-                                bitmap
-                            )
-                        )
-                    )
-                }
-
-            } catch (e: Exception) {
-                Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        if (coreVM.colorPalette.value.isNotEmpty() && launchedEffectTriggered) {
-            LaunchedEffect(key1 = true) {
-
-                vibrant = coreVM.colorPalette.value["vibrant"] ?: "000000"
-                darkVibrant = coreVM.colorPalette.value["darkVibrant"] ?: "000000"
-                onDarkVibrant = coreVM.colorPalette.value["onDarkVibrant"] ?: "000000"
-                lightVibrant = coreVM.colorPalette.value["lightVibrant"] ?: "000000"
-                dominantSwatch = coreVM.colorPalette.value["dominantSwatch"] ?: "000000"
-                mutedSwatch = coreVM.colorPalette.value["mutedSwatch"] ?: "000000"
-                lightMutedSwatch = coreVM.colorPalette.value["lightMutedSwatch"] ?: "000000"
-                darkMutedSwatch = coreVM.colorPalette.value["darkMutedSwatch"] ?: "000000"
-            }
-        }
-
-        systemController.setStatusBarColor(
-            color = Color(parseColor(lightVibrant))
-        )
 
         Scaffold(
             topBar = {
@@ -174,7 +117,7 @@ fun DetailsScreen(
                         context = context,
                         detailsViewModel = detailsVM,
                         snackImage = snack.snackImageUrl,
-                        primaryColor = Color(parseColor(lightVibrant)),
+                        primaryColor = MaterialTheme.colorScheme.primary,
                         onFavoriteClicked = {
 
                             detailsVM.onEvent(
@@ -224,7 +167,7 @@ fun DetailsScreen(
                     DetailsPrice(
                         detailsVM = detailsVM,
                         snackPrice = snack.snackPrice,
-                        primaryColor = Color(parseColor(lightVibrant))
+                        primaryColor = MaterialTheme.colorScheme.primary
                     )
 
                     //  description
@@ -256,7 +199,7 @@ fun DetailsScreen(
                             Icon(
                                 imageVector = Icons.Outlined.Done,
                                 contentDescription = "done icon",
-                                tint = Color(parseColor(lightVibrant))
+                                tint = MaterialTheme.colorScheme.primary
                             )
 
                             Spacer(modifier = Modifier.width(8.dp))
@@ -264,33 +207,35 @@ fun DetailsScreen(
                             Text(
                                 text = "Item already added to cart.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color(parseColor(lightVibrant))
+                                color = MaterialTheme.colorScheme.primary
                             )
 
                         } else {
                             //  add to card button
                             Button(
                                 onClick = {
-                                    //    add my cart item in firestore
-                                    detailsVM.onEvent(
-                                        DetailsEvents.UpdateCartItems(
-                                            email = userDetails.userEmail,
-                                            cart = Cart(
-                                                snackTitle = snackTitle,
-                                                snackCategory = snackCategory,
-                                                snackPrice = snack.snackPrice,
-                                                snackQuantity = detailsVM.itemQuantity.value,
-                                                snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
-                                            ),
-                                            isAdd = true,
-                                            response = {}
+                                    if (!userDetails.userCartItems.map { it.snackTitle }.contains(myCart.snackTitle)) {
+                                        //    add my cart item in firestore
+                                        detailsVM.onEvent(
+                                            DetailsEvents.UpdateCartItems(
+                                                email = userDetails.userEmail,
+                                                cart = Cart(
+                                                    snackTitle = snackTitle,
+                                                    snackCategory = snackCategory,
+                                                    snackPrice = snack.snackPrice,
+                                                    snackQuantity = detailsVM.itemQuantity.value,
+                                                    snackTotalPrice = snack.snackPrice * detailsVM.itemQuantity.value
+                                                ),
+                                                isAdd = true,
+                                                response = {}
+                                            )
                                         )
-                                    )
+                                    }
                                 },
                                 colors = ButtonDefaults.buttonColors(
 
                                     containerColor = if (detailsVM.itemQuantity.value > 0)
-                                        Color(parseColor(lightVibrant))
+                                        MaterialTheme.colorScheme.primary
                                     else
                                         MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f),
 
@@ -306,7 +251,10 @@ fun DetailsScreen(
                                 Icon(
                                     imageVector = Icons.Outlined.ShoppingCart,
                                     contentDescription = "cart icon",
-                                    tint = Color(parseColor(darkVibrant))
+                                    tint = if (detailsVM.itemQuantity.value > 0)
+                                        Color.White
+                                    else
+                                        MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f)
                                 )
 
                                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
