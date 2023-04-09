@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kenstarry.snacky.core.domain.model.Snack
@@ -16,6 +17,7 @@ import com.kenstarry.snacky.ui.custom.spacing
 
 @Composable
 fun FavouriteSnacks(
+    snackBarHostState: SnackbarHostState,
     direction: Direction,
     email: String,
     favouriteSnacks: List<Snack>
@@ -30,6 +32,7 @@ fun FavouriteSnacks(
             items(snackCategories) { category ->
 
                 FavouriteCategoriesItem(
+                    snackBarHostState = snackBarHostState,
                     email = email,
                     category = category,
                     favouriteSnacksUnderCategory = favouriteSnacks.filter { it.snackCategory == category },

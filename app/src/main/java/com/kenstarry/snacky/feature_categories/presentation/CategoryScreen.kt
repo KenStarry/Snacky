@@ -3,6 +3,7 @@ package com.kenstarry.snacky.feature_categories.presentation
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material3.*
@@ -72,11 +73,24 @@ fun CategoryScreen(
                 onActionIconPressed = {}
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState) {
+
+                Snackbar(
+                    snackbarData = it,
+                    shape = RoundedCornerShape(MaterialTheme.spacing.medium),
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                    actionColor = MaterialTheme.colorScheme.primary,
+                    dismissActionContentColor = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
     ) { contentPadding ->
 
-        categoryVM.categoryDetails.value?.let { category ->
-
+        if (categoryVM.categoryDetails.value != null &&
+            coreVM.userDetails.value != null
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -95,24 +109,21 @@ fun CategoryScreen(
                     //  category header
                     CategoryHeader(
                         context = context,
-                        category = category
+                        category = categoryVM.categoryDetails.value
                     )
 
-                    coreVM.userDetails.value?.let { user ->
-                        //  category images
-                        CategorySnackImages(
-                            snackBarHostState = snackBarHostState,
-                            userDetails = user,
-                            detailsVM = detailsVM,
-                            direction = direction,
-                            snacks = categoryVM.snacksInCategory.value
-                        )
-                    }
+                    //  category images
+                    CategorySnackImages(
+                        snackBarHostState = snackBarHostState,
+                        userDetails = coreVM.userDetails.value!!,
+                        detailsVM = detailsVM,
+                        direction = direction,
+                        snacks = categoryVM.snacksInCategory.value
+                    )
 
                 }
 
             }
-
         }
 
     }

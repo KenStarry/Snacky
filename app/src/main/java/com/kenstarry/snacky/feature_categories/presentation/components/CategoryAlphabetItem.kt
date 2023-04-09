@@ -74,7 +74,26 @@ fun CategoryAlphabetItem(
                                         email = userDetails.userEmail,
                                         snack = it,
                                         isAdd = false,
-                                        response = {}
+                                        response = { res ->
+                                            when (res) {
+                                                is Response.Success -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack removed from favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     ))
                             } else {
                                 detailsVM.onEvent(
@@ -87,12 +106,19 @@ fun CategoryAlphabetItem(
                                                 is Response.Success -> {
                                                     scope.launch {
                                                         snackBarHostState.showSnackbar(
-                                                            message = "Added to favourites!",
+                                                            message = "Snack added to favourites.",
                                                             withDismissAction = true
                                                         )
                                                     }
                                                 }
-                                                is Response.Failure -> {}
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
                                     ))

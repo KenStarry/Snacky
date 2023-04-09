@@ -4,17 +4,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -38,6 +37,7 @@ fun FavouritesScreen(
 
     val coreVM: CoreViewModel = hiltViewModel()
     val direction = Direction(mainNavHostController)
+    val snackBarHostState = remember { SnackbarHostState() }
 
     val currentUser = coreVM.getCurrentUser()
     coreVM.onEvent(CoreEvents.GetUserDetails(
@@ -53,6 +53,19 @@ fun FavouritesScreen(
                 onActionIconPressed = {},
                 onBackPressed = {}
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState) {
+
+                Snackbar(
+                    snackbarData = it,
+                    shape = RoundedCornerShape(MaterialTheme.spacing.medium),
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                    actionColor = MaterialTheme.colorScheme.primary,
+                    dismissActionContentColor = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     ) { contentPadding ->
 
@@ -80,6 +93,7 @@ fun FavouritesScreen(
 
                         // favourite items
                         FavouriteSnacks(
+                            snackBarHostState = snackBarHostState,
                             direction = direction,
                             email = user.userEmail,
                             favouriteSnacks = user.userSnackFavourites

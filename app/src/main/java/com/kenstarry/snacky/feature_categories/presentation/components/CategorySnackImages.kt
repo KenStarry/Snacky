@@ -28,6 +28,8 @@ fun CategorySnackImages(
         mutableListOf<Char>()
     }
 
+    alphabetsList.clear()
+
     ('A'..'Z').forEach { alphabet ->
         alphabetsList.add(alphabet)
     }

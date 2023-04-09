@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Done
@@ -48,6 +49,8 @@ fun DetailsScreen(
     val coreVM: CoreViewModel = hiltViewModel()
     val detailsVM: DetailsViewModel = hiltViewModel()
     val context = LocalContext.current
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     val currentUser = coreVM.getCurrentUser()
     coreVM.onEvent(CoreEvents.GetUserDetails(
@@ -89,6 +92,19 @@ fun DetailsScreen(
                         direction.navigateUp()
                     }
                 )
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHostState) {
+
+                    Snackbar(
+                        snackbarData = it,
+                        shape = RoundedCornerShape(MaterialTheme.spacing.medium),
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                        actionColor = MaterialTheme.colorScheme.primary,
+                        dismissActionContentColor = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         ) { contentPadding ->
 
@@ -138,25 +154,28 @@ fun DetailsScreen(
                                         when (res) {
                                             is Response.Success -> {
                                                 if (detailsVM.isFavoriteToggled.value) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Snack added to favourites successfully!",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack added to favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
                                                 } else {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Snack removed from favourites successfully!",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack removed from favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
                                                 }
                                             }
                                             is Response.Failure -> {
-                                                Toast.makeText(
-                                                    context,
-                                                    res.error.toString(),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                scope.launch {
+                                                    snackBarHostState.showSnackbar(
+                                                        message = "Something went wrong...",
+                                                        withDismissAction = true
+                                                    )
+                                                }
                                             }
                                         }
                                     }
