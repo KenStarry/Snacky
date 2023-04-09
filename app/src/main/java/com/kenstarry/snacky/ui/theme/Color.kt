@@ -13,3 +13,5 @@ val LightBackgroundAlt = Color(0xFFf9f8f9)
 
 val TextBlack = Color(0xFF000000)
 val TextWhite = Color(0xFFFFFFFF)
+
+val DisabledButton = Color(0xFF575757)

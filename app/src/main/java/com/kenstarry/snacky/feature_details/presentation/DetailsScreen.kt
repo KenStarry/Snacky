@@ -32,6 +32,7 @@ import com.kenstarry.snacky.feature_details.presentation.components.*
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
+import com.kenstarry.snacky.ui.theme.DisabledButton
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -246,7 +247,7 @@ fun DetailsScreen(
                                     containerColor = if (detailsVM.itemQuantity.value > 0)
                                         MaterialTheme.colorScheme.primary
                                     else
-                                        Color.Gray,
+                                        DisabledButton,
 
                                     contentColor = if (detailsVM.itemQuantity.value > 0)
                                         Color.White

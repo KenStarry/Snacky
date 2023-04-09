@@ -92,7 +92,7 @@ fun CartSummary() {
 
             //  subtotal
             Text(
-                text = "Ksh. ${cartVM.subTotalPrice.value - 85}",
+                text = "Ksh. ${cartVM.subTotalPrice.value + 85}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
             )
