@@ -2,6 +2,7 @@ package com.kenstarry.snacky.feature_home.presentation.components
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +21,8 @@ import com.kenstarry.snacky.ui.custom.spacing
 @Composable
 fun CategoryItem(
     context: Context,
-    category: Category
+    category: Category,
+    onCategoryClicked: () -> Unit
 ) {
 
     Row(
@@ -29,6 +31,7 @@ fun CategoryItem(
             .wrapContentWidth()
             .height(30.dp)
             .background(MaterialTheme.colorScheme.onSecondary)
+            .clickable { onCategoryClicked() }
             .padding(
                 horizontal = MaterialTheme.spacing.medium,
                 vertical = MaterialTheme.spacing.small

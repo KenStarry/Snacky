@@ -20,7 +20,8 @@ import com.kenstarry.snacky.ui.custom.spacing
 @Composable
 fun CategoriesSection(
     context: Context,
-    categories: List<Category>
+    categories: List<Category>,
+    onCategoryClicked: (category: String) -> Unit
 ) {
 
     val lazyStaggeredGridState = rememberLazyStaggeredGridState()
@@ -31,7 +32,10 @@ fun CategoriesSection(
             items(categories) { category ->
                 CategoryItem(
                     context = context,
-                    category = category
+                    category = category,
+                    onCategoryClicked = {
+                        onCategoryClicked(category.categoryName)
+                    }
                 )
             }
         },

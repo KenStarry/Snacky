@@ -114,7 +114,13 @@ fun HomeScreen(
                         //  snack categories
                         CategoriesSection(
                             context = context,
-                            categories = homeVM.categories.value
+                            categories = homeVM.categories.value,
+                            onCategoryClicked = {
+                                direction.navigateToRoute(
+                                    Screen.Category.passCategory(it),
+                                    null
+                                )
+                            }
                         )
 
                         //  popular section

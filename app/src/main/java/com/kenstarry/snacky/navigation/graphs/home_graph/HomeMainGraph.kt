@@ -4,6 +4,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.kenstarry.snacky.core.domain.model.Snack
 import com.kenstarry.snacky.core.domain.model.User
+import com.kenstarry.snacky.feature_categories.presentation.CategoryScreen
 import com.kenstarry.snacky.feature_details.presentation.DetailsScreen
 import com.kenstarry.snacky.feature_main.presentation.MainScreen
 import com.kenstarry.snacky.navigation.NavConstants
@@ -44,5 +45,49 @@ fun NavGraphBuilder.homeMainNavgraph(
                 snackTitle = it.arguments?.getString("title") ?: "no title"
             )
         }
+
+        //  category screen
+        composable(
+            route = Screen.Category.route,
+            arguments = listOf(
+                navArgument("category") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            CategoryScreen(
+                mainNavHostController = mainNavHostController,
+                category = it.arguments?.getString("category") ?: "no category"
+            )
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -11,6 +11,7 @@ object NavConstants {
     //  Screens
     const val MAIN_SCREEN_ROUTE = "main screen route"
     const val DETAILS_SCREEN_ROUTE = "details screen route"
+    const val CATEGORY_SCREEN_ROUTE = "category screen route"
     const val LOGIN_SCREEN_ROUTE = "login screen route"
     const val SIGN_UP_SCREEN_ROUTE = "sign up screen route"
 
