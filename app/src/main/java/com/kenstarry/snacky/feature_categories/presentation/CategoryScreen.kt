@@ -21,6 +21,8 @@ fun CategoryScreen(
     category: String
 ) {
 
+    //  get all category snacks
+
     Scaffold(
         topBar = {
             CenterBackTopBar(
