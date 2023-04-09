@@ -93,7 +93,7 @@ fun SnackItem(
             CoilImage(
                 context = context,
                 imageUri = snack.snackImageUrl.toUri(),
-                placeholder = R.drawable.undraw_ice_cream_s_2_rh,
+                placeholder = R.drawable.baseline_broken_image_24,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .clip(RoundedCornerShape(MaterialTheme.spacing.medium))

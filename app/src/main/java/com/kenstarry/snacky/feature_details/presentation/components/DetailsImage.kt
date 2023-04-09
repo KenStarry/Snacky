@@ -51,7 +51,7 @@ fun DetailsImage(
             CoilImage(
                 context = context,
                 imageUri = snackImage.toUri(),
-                placeholder = R.drawable.undraw_ice_cream_s_2_rh,
+                placeholder = R.drawable.baseline_broken_image_24,
                 modifier = Modifier
                     .width(200.dp)
                     .height(200.dp),

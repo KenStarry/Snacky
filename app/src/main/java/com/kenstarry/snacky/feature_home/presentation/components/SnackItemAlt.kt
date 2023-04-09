@@ -67,7 +67,7 @@ fun SnackItemAlt(
                 CoilImage(
                     context = context,
                     imageUri = snack.snackImageUrl.toUri(),
-                    placeholder = R.drawable.undraw_ice_cream_s_2_rh,
+                    placeholder = R.drawable.baseline_broken_image_24,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
