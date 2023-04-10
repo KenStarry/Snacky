@@ -12,14 +12,12 @@ import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,7 +30,7 @@ import com.kenstarry.snacky.R
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.presentation.components.AnnotatedClickableString
 import com.kenstarry.snacky.core.presentation.components.CustomTextField
-import com.kenstarry.snacky.feature_authentication.AuthConstants
+import com.kenstarry.snacky.core.presentation.components.LoadingCircle
 import com.kenstarry.snacky.feature_authentication.login.domain.model.LoginEvents
 import com.kenstarry.snacky.feature_authentication.login.domain.model.form.LoginFormEvents
 import com.kenstarry.snacky.feature_authentication.login.presentation.viewmodel.LoginViewModel
@@ -50,6 +48,10 @@ fun LoginScreen(
     val direction = Direction(mainNavHostController)
     val loginVM: LoginViewModel = hiltViewModel()
     val context = LocalContext.current
+
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -161,42 +163,61 @@ fun LoginScreen(
                     .wrapContentHeight(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(onClick = {
-                    //  login user
-                    loginVM.onEvent(LoginEvents.LoginUser(
-                        email = loginVM.formState.email,
-                        password = loginVM.formState.password,
-                        onResponse = { res ->
-                            when (res) {
 
-                                is Response.Success -> {
-                                    direction.navigateToRoute(
-                                        NavConstants.MAIN_ROUTE,
-                                        NavConstants.AUTHENTICATION_ROUTE
-                                    )
-
-                                    Toast.makeText(
-                                        context,
-                                        "Welcome back!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                is Response.Failure -> {
-                                    Toast.makeText(
-                                        context,
-                                        res.error.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-                    ))
-                }) {
-                    Text(
-                        text = "Login",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                if (isLoading) {
+                    LoadingCircle(
+                        primaryColor = MaterialTheme.colorScheme.primary,
+                        tertiaryColor = MaterialTheme.colorScheme.tertiary
                     )
+                } else {
+                    Button(
+                        onClick = {
+
+                            isLoading = true
+
+                            //  login user
+                            loginVM.onEvent(LoginEvents.LoginUser(
+                                email = loginVM.formState.email,
+                                password = loginVM.formState.password,
+                                onResponse = { res ->
+                                    when (res) {
+
+                                        is Response.Success -> {
+
+                                            isLoading = false
+
+                                            direction.navigateToRoute(
+                                                NavConstants.MAIN_ROUTE,
+                                                NavConstants.AUTHENTICATION_ROUTE
+                                            )
+
+                                            Toast.makeText(
+                                                context,
+                                                "Welcome back!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        is Response.Failure -> {
+
+                                            isLoading = false
+
+                                            Toast.makeText(
+                                                context,
+                                                res.error.toString(),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                                }
+                            ))
+                        }
+                    ) {
+                        Text(
+                            text = "Login",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
                 }
             }
 

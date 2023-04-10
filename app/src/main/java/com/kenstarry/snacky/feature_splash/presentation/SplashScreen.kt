@@ -1,10 +1,7 @@
 package com.kenstarry.snacky.feature_splash.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.kenstarry.snacky.R
+import com.kenstarry.snacky.core.presentation.components.Lottie
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.NavConstants
@@ -33,7 +32,7 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
 
-        delay(2000)
+        delay(3000)
 
         //  navigate to either main route or login route
         if (coreVM.isUserLoggedIn()) {
@@ -57,6 +56,17 @@ fun SplashScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        //  pizza image
+        Lottie(
+            rawFile = R.raw.pizza,
+            iterations = Int.MAX_VALUE,
+            isPlaying = true,
+            modifier = Modifier
+                .fillMaxSize(0.5f)
+        )
+
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
         Text(
             text = buildAnnotatedString {

@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.kenstarry.snacky.core.domain.model.Response
 import com.kenstarry.snacky.core.domain.model.User
 import com.kenstarry.snacky.core.presentation.components.BackPressTopBar
+import com.kenstarry.snacky.core.presentation.components.LoadingCircle
 import com.kenstarry.snacky.feature_authentication.AuthConstants
 import com.kenstarry.snacky.feature_authentication.sign_up.domain.model.RegistrationFormEvents
 import com.kenstarry.snacky.feature_authentication.sign_up.domain.model.SignUpEvents
@@ -44,6 +45,10 @@ fun SignUpScreen(
         mutableStateOf<Uri?>(null)
     }
 
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { imageUri ->
@@ -58,8 +63,6 @@ fun SignUpScreen(
 
             when (event) {
                 is ValidationEvent.Success -> {
-
-                    Toast.makeText(context, "Everything is in order", Toast.LENGTH_SHORT).show()
 
                     signUpVM.onEvent(
                         SignUpEvents.CreateAccount(
@@ -95,6 +98,8 @@ fun SignUpScreen(
                                             Toast.LENGTH_SHORT
                                         ).show()
 
+                                        isLoading = false
+
                                         //  navigate to main route
                                         direction.navigateToRoute(
                                             NavConstants.MAIN_ROUTE,
@@ -102,6 +107,9 @@ fun SignUpScreen(
                                         )
                                     }
                                     is Response.Failure -> {
+
+                                        isLoading = false
+
                                         Toast.makeText(
                                             context,
                                             "${res.error}",
@@ -114,8 +122,7 @@ fun SignUpScreen(
                     )
                 }
                 is ValidationEvent.Failure -> {
-                    Toast.makeText(context, signUpVM.formState.password, Toast.LENGTH_SHORT).show()
-                    Toast.makeText(context, signUpVM.formState.confirmPassword, Toast.LENGTH_SHORT).show()
+                    isLoading = false
                 }
 
             }
@@ -185,16 +192,27 @@ fun SignUpScreen(
                         .wrapContentHeight(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Button(onClick = {
-                        //  create user account
-                        signUpVM.onFormEvent(RegistrationFormEvents.Submit)
 
-                    }) {
-                        Text(
-                            text = "create account",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                    if (isLoading) {
+                        LoadingCircle(
+                            primaryColor = MaterialTheme.colorScheme.primary,
+                            tertiaryColor = MaterialTheme.colorScheme.tertiary
                         )
+                    } else {
+                        Button(onClick = {
+
+                            isLoading = true
+
+                            //  create user account
+                            signUpVM.onFormEvent(RegistrationFormEvents.Submit)
+
+                        }) {
+                            Text(
+                                text = "create account",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
                     }
                 }
 
