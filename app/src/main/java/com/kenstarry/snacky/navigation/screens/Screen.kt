@@ -4,6 +4,8 @@ import com.kenstarry.snacky.navigation.NavConstants
 
 sealed class Screen(val route: String) {
 
+    object Splash : Screen(NavConstants.SPLASH_SCREEN_ROUTE)
+
     object Main : Screen(NavConstants.MAIN_SCREEN_ROUTE)
 
     object Details : Screen("${NavConstants.DETAILS_SCREEN_ROUTE}/{category}/{title}") {
