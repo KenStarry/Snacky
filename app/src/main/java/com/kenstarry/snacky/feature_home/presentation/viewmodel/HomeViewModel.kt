@@ -69,8 +69,8 @@ class HomeViewModel @Inject constructor(
                     val filteredSnacks = mutableListOf<Snack>()
 
                     allSnacks.forEach { snack ->
-                        if (snack.snackName.title.lowercase().contains(event.query) ||
-                            snack.snackCategory.lowercase().contains(event.query)
+                        if (snack.snackName.title.lowercase().contains(event.query.lowercase()) ||
+                            snack.snackCategory.lowercase().contains(event.query.lowercase())
                         ) {
                             filteredSnacks.add(snack)
                         }

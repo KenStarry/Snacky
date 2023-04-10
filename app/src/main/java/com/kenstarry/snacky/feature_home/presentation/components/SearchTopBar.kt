@@ -54,7 +54,8 @@ fun SearchTopBar(
         placeholder = {
             Text(
                 text = "Burgers, Cupcakes",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.3f)
             )
         },
         keyboardOptions = KeyboardOptions(
