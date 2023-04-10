@@ -26,6 +26,7 @@ import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
 import com.kenstarry.snacky.feature_favourites.presentation.components.FavouriteSnacks
 import com.kenstarry.snacky.feature_favourites.presentation.components.SortTitleSection
 import com.kenstarry.snacky.navigation.Direction
+import com.kenstarry.snacky.navigation.NavConstants
 import com.kenstarry.snacky.ui.custom.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +52,12 @@ fun FavouritesScreen(
                 title = "Favourites",
                 titleIcon = Icons.Filled.Favorite,
                 onActionIconPressed = {},
-                onBackPressed = {}
+                onBackPressed = {
+                    direction.navigateToRoute(
+                        NavConstants.MAIN_ROUTE,
+                        NavConstants.MAIN_ROUTE
+                    )
+                }
             )
         },
         snackbarHost = {

@@ -62,7 +62,12 @@ fun SettingsScreen(
                 title = "Settings",
                 titleIcon = Icons.Outlined.Settings,
                 actions = emptyArray(),
-                onBackPressed = { /*TODO*/ },
+                onBackPressed = {
+                    direction.navigateToRoute(
+                        NavConstants.MAIN_ROUTE,
+                        NavConstants.MAIN_ROUTE
+                    )
+                },
                 onActionIconPressed = {}
             )
         }
@@ -95,12 +100,14 @@ fun SettingsScreen(
                                     is Response.Success -> {
 
                                         //  close alert dialog
-                                        settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                                            alertDialogStatus = AlertDialogStatus(
-                                                dialogTitle = SettingsConstants.LOGOUT_DIALOG,
-                                                isDialogVisible = false
+                                        settingsVM.onEvent(
+                                            SettingsEvents.ToggleAlertDialog(
+                                                alertDialogStatus = AlertDialogStatus(
+                                                    dialogTitle = SettingsConstants.LOGOUT_DIALOG,
+                                                    isDialogVisible = false
+                                                )
                                             )
-                                        ))
+                                        )
 
                                         Toast.makeText(
                                             context,
@@ -127,12 +134,14 @@ fun SettingsScreen(
                 },
                 onDismiss = {
                     //  close alert dialog
-                    settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                        alertDialogStatus = AlertDialogStatus(
-                            dialogTitle = SettingsConstants.LOGOUT_DIALOG,
-                            isDialogVisible = false
+                    settingsVM.onEvent(
+                        SettingsEvents.ToggleAlertDialog(
+                            alertDialogStatus = AlertDialogStatus(
+                                dialogTitle = SettingsConstants.LOGOUT_DIALOG,
+                                isDialogVisible = false
+                            )
                         )
-                    ))
+                    )
                 }
             )
 
@@ -167,12 +176,14 @@ fun SettingsScreen(
                                     is Response.Success -> {
 
                                         //  close alert dialog
-                                        settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                                            alertDialogStatus = AlertDialogStatus(
-                                                dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
-                                                isDialogVisible = false
+                                        settingsVM.onEvent(
+                                            SettingsEvents.ToggleAlertDialog(
+                                                alertDialogStatus = AlertDialogStatus(
+                                                    dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
+                                                    isDialogVisible = false
+                                                )
                                             )
-                                        ))
+                                        )
 
                                         Toast.makeText(
                                             context,
@@ -200,12 +211,14 @@ fun SettingsScreen(
                 },
                 onDismiss = {
                     //  close alert dialog
-                    settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                        alertDialogStatus = AlertDialogStatus(
-                            dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
-                            isDialogVisible = false
+                    settingsVM.onEvent(
+                        SettingsEvents.ToggleAlertDialog(
+                            alertDialogStatus = AlertDialogStatus(
+                                dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
+                                isDialogVisible = false
+                            )
                         )
-                    ))
+                    )
                 }
             )
 
@@ -246,22 +259,26 @@ fun SettingsScreen(
                         .padding(MaterialTheme.spacing.small),
                     onLogout = {
                         //  open alert dialog
-                        settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                            alertDialogStatus = AlertDialogStatus(
-                                dialogTitle = SettingsConstants.LOGOUT_DIALOG,
-                                isDialogVisible = true
+                        settingsVM.onEvent(
+                            SettingsEvents.ToggleAlertDialog(
+                                alertDialogStatus = AlertDialogStatus(
+                                    dialogTitle = SettingsConstants.LOGOUT_DIALOG,
+                                    isDialogVisible = true
+                                )
                             )
-                        ))
+                        )
                     },
                     onDeleteAccount = {
 
                         //  open alert dialog
-                        settingsVM.onEvent(SettingsEvents.ToggleAlertDialog(
-                            alertDialogStatus = AlertDialogStatus(
-                                dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
-                                isDialogVisible = true
+                        settingsVM.onEvent(
+                            SettingsEvents.ToggleAlertDialog(
+                                alertDialogStatus = AlertDialogStatus(
+                                    dialogTitle = SettingsConstants.DELETE_ACCOUNT_DIALOG,
+                                    isDialogVisible = true
+                                )
                             )
-                        ))
+                        )
                     }
                 )
 
