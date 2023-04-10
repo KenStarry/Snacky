@@ -20,6 +20,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.kenstarry.snacky.R
@@ -32,6 +33,8 @@ import com.kenstarry.snacky.ui.theme.Poppins
 @Composable
 fun SnackItem(
     context: Context,
+    width: Dp = 200.dp,
+    height: Dp = 250.dp,
     snack: Snack,
     isFavourite: Boolean,
     onSnackClicked: () -> Unit,
@@ -40,8 +43,8 @@ fun SnackItem(
 
     Card(
         modifier = Modifier
-            .width(200.dp)
-            .height(250.dp),
+            .width(width)
+            .height(height),
         shape = RoundedCornerShape(MaterialTheme.spacing.medium),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp

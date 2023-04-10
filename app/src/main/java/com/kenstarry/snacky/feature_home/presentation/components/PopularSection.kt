@@ -23,6 +23,8 @@ import com.kenstarry.snacky.core.domain.model.User
 import com.kenstarry.snacky.feature_details.domain.model.DetailsEvents
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.ui.custom.spacing
+import com.kenstarry.snacky.window.model.WindowType
+import com.kenstarry.snacky.window.rememberWindowInfo
 import kotlinx.coroutines.launch
 
 @Composable
@@ -37,6 +39,7 @@ fun PopularSection(
     val context = LocalContext.current
     val detailsVM: DetailsViewModel = hiltViewModel()
     val scope = rememberCoroutineScope()
+    val windowInfo = rememberWindowInfo()
 
     Column(
         modifier = Modifier
@@ -94,77 +97,148 @@ fun PopularSection(
                     val isFavouriteSnack = userDetails.userSnackFavourites
                         .contains(snack)
 
-                    SnackItem(
-                        context = context,
-                        snack = snack,
-                        isFavourite = isFavouriteSnack,
-                        onSnackClicked = {
-                            onSnackClicked(snack)
-                        },
-                        onFavoriteClicked = {
-                            //  if is favourite
-                            if (isFavouriteSnack) {
-                                detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
-                                    email = userDetails.userEmail,
-                                    snack = snack,
-                                    isAdd = false,
-                                    response = { res ->
-                                        when (res) {
-                                            is Response.Success -> {
-                                                scope.launch {
-                                                    snackBarHostState.showSnackbar(
-                                                        message = "Snack removed from favourites.",
-                                                        withDismissAction = true
-                                                    )
+                    if (windowInfo.screenWidthInfo is WindowType.Compact) {
+                        //  phone
+                        SnackItem(
+                            context = context,
+                            snack = snack,
+                            isFavourite = isFavouriteSnack,
+                            onSnackClicked = {
+                                onSnackClicked(snack)
+                            },
+                            onFavoriteClicked = {
+                                //  if is favourite
+                                if (isFavouriteSnack) {
+                                    detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snack = snack,
+                                        isAdd = false,
+                                        response = { res ->
+                                            when (res) {
+                                                is Response.Success -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack removed from favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
                                                 }
-                                            }
-                                            is Response.Failure -> {
-                                                scope.launch {
-                                                    snackBarHostState.showSnackbar(
-                                                        message = "Something went wrong...",
-                                                        withDismissAction = true
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
-                                ))
-                            } else {
-                                detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
-                                    email = userDetails.userEmail,
-                                    snack = snack,
-                                    isAdd = true,
-                                    response = {res ->
-                                        when (res) {
-                                            is Response.Success -> {
-                                                scope.launch {
-                                                    snackBarHostState.showSnackbar(
-                                                        message = "Snack added to favourites.",
-                                                        withDismissAction = true
-                                                    )
-                                                }
-                                            }
-                                            is Response.Failure -> {
-                                                scope.launch {
-                                                    snackBarHostState.showSnackbar(
-                                                        message = "Something went wrong...",
-                                                        withDismissAction = true
-                                                    )
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                ))
+                                    ))
+                                } else {
+                                    detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snack = snack,
+                                        isAdd = true,
+                                        response = {res ->
+                                            when (res) {
+                                                is Response.Success -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack added to favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ))
+                                }
                             }
-                        }
-                    )
+                        )
+                    } else {
+                        //  tablet
+                        SnackItem(
+                            context = context,
+                            width = 250.dp,
+                            height = 300.dp,
+                            snack = snack,
+                            isFavourite = isFavouriteSnack,
+                            onSnackClicked = {
+                                onSnackClicked(snack)
+                            },
+                            onFavoriteClicked = {
+                                //  if is favourite
+                                if (isFavouriteSnack) {
+                                    detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snack = snack,
+                                        isAdd = false,
+                                        response = { res ->
+                                            when (res) {
+                                                is Response.Success -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack removed from favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ))
+                                } else {
+                                    detailsVM.onEvent(DetailsEvents.UpdateSnackFavorites(
+                                        email = userDetails.userEmail,
+                                        snack = snack,
+                                        isAdd = true,
+                                        response = {res ->
+                                            when (res) {
+                                                is Response.Success -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Snack added to favourites.",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                                is Response.Failure -> {
+                                                    scope.launch {
+                                                        snackBarHostState.showSnackbar(
+                                                            message = "Something went wrong...",
+                                                            withDismissAction = true
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ))
+                                }
+                            }
+                        )
+                    }
                 }
             },
             state = listState,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
         )
 
     }

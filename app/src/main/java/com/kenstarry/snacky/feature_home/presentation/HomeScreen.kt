@@ -1,6 +1,5 @@
 package com.kenstarry.snacky.feature_home.presentation
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -23,8 +22,7 @@ import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.Screen
 import com.kenstarry.snacky.ui.custom.spacing
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.kenstarry.snacky.window.rememberWindowInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +39,7 @@ fun HomeScreen(
     val directionInner = Direction(innerNavHostController)
     val systemController = rememberSystemUiController()
     val snackBarHostState = remember { SnackbarHostState() }
+    val windowInfo = rememberWindowInfo()
 
     systemController.setStatusBarColor(
         color = MaterialTheme.colorScheme.onPrimary

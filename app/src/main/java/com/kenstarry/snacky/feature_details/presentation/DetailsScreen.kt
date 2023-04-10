@@ -34,6 +34,8 @@ import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewMo
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.ui.custom.spacing
 import com.kenstarry.snacky.ui.theme.DisabledButton
+import com.kenstarry.snacky.window.model.WindowType
+import com.kenstarry.snacky.window.rememberWindowInfo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +53,7 @@ fun DetailsScreen(
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val windowInfo = rememberWindowInfo()
 
     val currentUser = coreVM.getCurrentUser()
     coreVM.onEvent(CoreEvents.GetUserDetails(
@@ -119,7 +122,12 @@ fun DetailsScreen(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.onPrimary)
                         .verticalScroll(rememberScrollState())
-                        .padding(MaterialTheme.spacing.medium),
+                        .padding(
+                            if (windowInfo.screenWidthInfo is WindowType.Compact)
+                                MaterialTheme.spacing.medium
+                            else
+                                MaterialTheme.spacing.extraLarge
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
                 ) {
@@ -196,7 +204,7 @@ fun DetailsScreen(
 
                     //  description
                     DetailsDescription(snackDescription = snack.snackDescription)
-                    
+
                     Spacer(modifier = Modifier.height(64.dp))
 
                 }
@@ -234,6 +242,8 @@ fun DetailsScreen(
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
+
+                            Spacer(modifier = Modifier.width(8.dp))
 
                         } else {
                             //  add to cart button

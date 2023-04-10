@@ -24,6 +24,8 @@ import com.kenstarry.snacky.R
 import com.kenstarry.snacky.core.presentation.components.CoilImage
 import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.ui.custom.spacing
+import com.kenstarry.snacky.window.model.WindowType
+import com.kenstarry.snacky.window.rememberWindowInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,59 +37,120 @@ fun DetailsImage(
     onFavoriteClicked: () -> Unit
 ) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    val windowInfo = rememberWindowInfo()
+
+    if (windowInfo.screenWidthInfo is WindowType.Compact) {
 
         Row(
             modifier = Modifier
-                .weight(1f),
-            horizontalArrangement = Arrangement.Start
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+
+            Row(
+                modifier = Modifier
+                    .weight(1f),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                CoilImage(
+                    context = context,
+                    imageUri = snackImage.toUri(),
+                    placeholder = R.drawable.baseline_broken_image_24,
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(200.dp),
+                    contentScale = ContentScale.None
+                )
+            }
+
+            //  favourites icon
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+                //  favourites
+                CardButton(
+                    icon = if (detailsViewModel.isFavoriteToggled.value)
+                        Icons.Filled.Favorite
+                    else
+                        Icons.Outlined.FavoriteBorder,
+                    primaryColor = primaryColor,
+                    onClick = {
+                        //  add item to favourites list
+                        onFavoriteClicked()
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                //  call button
+                CardButton(
+                    icon = Icons.Outlined.Call,
+                    primaryColor = primaryColor,
+                    onClick = {}
+                )
+
+            }
+
+        }
+
+    } else {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
             CoilImage(
                 context = context,
                 imageUri = snackImage.toUri(),
                 placeholder = R.drawable.baseline_broken_image_24,
                 modifier = Modifier
-                    .width(200.dp)
-                    .height(200.dp),
+                    .width(250.dp)
+                    .height(250.dp),
                 contentScale = ContentScale.None
             )
-        }
 
-        //  favourites icon
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+            //  favourites icon
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            //  favourites
-            CardButton(
-                icon = if (detailsViewModel.isFavoriteToggled.value)
-                    Icons.Filled.Favorite
-                else
-                    Icons.Outlined.FavoriteBorder,
-                primaryColor = primaryColor,
-                onClick = {
-                    //  add item to favourites list
-                    onFavoriteClicked()
-                }
-            )
+                //  favourites
+                CardButton(
+                    icon = if (detailsViewModel.isFavoriteToggled.value)
+                        Icons.Filled.Favorite
+                    else
+                        Icons.Outlined.FavoriteBorder,
+                    primaryColor = primaryColor,
+                    onClick = {
+                        //  add item to favourites list
+                        onFavoriteClicked()
+                    }
+                )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-            //  call button
-            CardButton(
-                icon = Icons.Outlined.Call,
-                primaryColor = primaryColor,
-                onClick = {}
-            )
+                //  call button
+                CardButton(
+                    icon = Icons.Outlined.Call,
+                    primaryColor = primaryColor,
+                    onClick = {}
+                )
+
+            }
 
         }
 
