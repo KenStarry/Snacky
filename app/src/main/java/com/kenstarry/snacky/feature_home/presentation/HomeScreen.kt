@@ -1,13 +1,13 @@
 package com.kenstarry.snacky.feature_home.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,11 +16,9 @@ import com.canopas.lib.showcase.IntroShowCaseScaffold
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kenstarry.snacky.core.domain.model.events.CoreEvents
 import com.kenstarry.snacky.core.presentation.viewmodel.CoreViewModel
+import com.kenstarry.snacky.feature_details.presentation.viewmodel.DetailsViewModel
 import com.kenstarry.snacky.feature_home.domain.model.HomeEvents
-import com.kenstarry.snacky.feature_home.presentation.components.CategoriesSection
-import com.kenstarry.snacky.feature_home.presentation.components.HomeTopBar
-import com.kenstarry.snacky.feature_home.presentation.components.PopularSection
-import com.kenstarry.snacky.feature_home.presentation.components.TopOfTheWeekSection
+import com.kenstarry.snacky.feature_home.presentation.components.*
 import com.kenstarry.snacky.feature_home.presentation.viewmodel.HomeViewModel
 import com.kenstarry.snacky.navigation.Direction
 import com.kenstarry.snacky.navigation.screens.Screen
@@ -38,6 +36,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val coreVM: CoreViewModel = hiltViewModel()
     val homeVM: HomeViewModel = hiltViewModel()
+    val detailsVM: DetailsViewModel = hiltViewModel()
     val direction = Direction(mainNavHostController)
     val directionInner = Direction(innerNavHostController)
     val systemController = rememberSystemUiController()
@@ -48,6 +47,10 @@ fun HomeScreen(
     )
 
     val currentUser = coreVM.getCurrentUser()
+
+    var isSearching by remember {
+        mutableStateOf(false)
+    }
 
     //  get current user details
     coreVM.onEvent(CoreEvents.GetUserDetails(
@@ -77,7 +80,9 @@ fun HomeScreen(
                         context = context,
                         userName = user.userName,
                         imageUri = user.userImageUri,
-                        onSearchPressed = {},
+                        onSearchPressed = {
+                            isSearching = true
+                        },
                         onImageClicked = {}
                     )
                 },
@@ -114,61 +119,71 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large)
                     ) {
 
-                        //  hungry text
-                        Text(
-                            text = "hungry? Order Up!",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
-                        )
+                        if (isSearching) {
+                            SearchScreen(
+                                snackBarHostState = snackBarHostState,
+                                userDetails = user,
+                                detailsVM = detailsVM,
+                                direction = direction,
+                                onCloseClicked = {
+                                    isSearching = false
+                                }
+                            )
+                        } else {
 
-                        //  search bar
-//                        SearchSection()
+                            //  hungry text
+                            Text(
+                                text = "hungry? Order Up!",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+                            )
 
-                        //  snack categories
-                        CategoriesSection(
-                            context = context,
-                            categories = homeVM.categories.value,
-                            onCategoryClicked = {
-                                direction.navigateToRoute(
-                                    Screen.Category.passCategory(it),
-                                    null
-                                )
-                            }
-                        )
+                            //  snack categories
+                            CategoriesSection(
+                                context = context,
+                                categories = homeVM.categories.value,
+                                onCategoryClicked = {
+                                    direction.navigateToRoute(
+                                        Screen.Category.passCategory(it),
+                                        null
+                                    )
+                                }
+                            )
 
-                        //  popular section
-                        PopularSection(
-                            snackBarHostState = snackBarHostState,
-                            userDetails = user,
-                            popularSnacks = homeVM.snacks.value,
-                            onSnackClicked = {
-                                //  open details for that snack
-                                direction.navigateToRoute(
-                                    Screen.Details.passSnackTitleAndCategory(
-                                        it.snackCategory,
-                                        it.snackName.title
-                                    ),
-                                    null
-                                )
-                            }
-                        )
+                            //  popular section
+                            PopularSection(
+                                snackBarHostState = snackBarHostState,
+                                userDetails = user,
+                                popularSnacks = homeVM.snacks.value,
+                                onSnackClicked = {
+                                    //  open details for that snack
+                                    direction.navigateToRoute(
+                                        Screen.Details.passSnackTitleAndCategory(
+                                            it.snackCategory,
+                                            it.snackName.title
+                                        ),
+                                        null
+                                    )
+                                }
+                            )
 
-                        //  top of the week
-                        TopOfTheWeekSection(
-                            snackBarHostState = snackBarHostState,
-                            userDetails = user,
-                            topSnacks = homeVM.snacks.value,
-                            onSnackClicked = {
-                                //  open details for that snack
-                                direction.navigateToRoute(
-                                    Screen.Details.passSnackTitleAndCategory(
-                                        it.snackCategory,
-                                        it.snackName.title
-                                    ),
-                                    null
-                                )
-                            }
-                        )
+                            //  top of the week
+                            TopOfTheWeekSection(
+                                snackBarHostState = snackBarHostState,
+                                userDetails = user,
+                                topSnacks = homeVM.snacks.value,
+                                onSnackClicked = {
+                                    //  open details for that snack
+                                    direction.navigateToRoute(
+                                        Screen.Details.passSnackTitleAndCategory(
+                                            it.snackCategory,
+                                            it.snackName.title
+                                        ),
+                                        null
+                                    )
+                                }
+                            )
+                        }
 
                     }
 

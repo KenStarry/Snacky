@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val useCases: HomeUseCases
-) : ViewModel(){
+) : ViewModel() {
 
     private val _categories = mutableStateOf<List<Category>>(emptyList())
     val categories: State<List<Category>> = _categories
@@ -59,6 +59,24 @@ class HomeViewModel @Inject constructor(
                             }
                         }
                     )
+                }
+            }
+
+            is HomeEvents.SearchForSnacks -> {
+                viewModelScope.launch {
+
+                    val allSnacks = _snacks.value.toMutableList()
+                    val filteredSnacks = mutableListOf<Snack>()
+
+                    allSnacks.forEach { snack ->
+                        if (snack.snackName.title.lowercase().contains(event.query) ||
+                            snack.snackCategory.lowercase().contains(event.query)
+                        ) {
+                            filteredSnacks.add(snack)
+                        }
+                    }
+
+                    event.filteredSnacks(filteredSnacks)
                 }
             }
         }
