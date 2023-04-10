@@ -85,47 +85,11 @@ fun AccountSection(
 
                                 when (it) {
                                     SettingsConstants.accountOptions[0] -> {
-                                        //  logout of account
-                                        settingsVM.onEvent(SettingsEvents.Logout(
-                                            onResponse = { res ->
-                                                when (res) {
-                                                    is Response.Success -> {
-                                                        onLogout()
-                                                    }
-                                                    is Response.Failure -> {
-                                                        Toast.makeText(
-                                                            context,
-                                                            res.error.toString(),
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
-                                                }
-                                            }
-                                        ))
+                                        onLogout()
                                     }
 
                                     SettingsConstants.accountOptions[1] -> {
-
-                                        coreVM.userDetails.value?.let { user ->
-                                            //  delete user account
-                                            settingsVM.onEvent(SettingsEvents.DeleteAccount(
-                                                email = user.userEmail,
-                                                onResponse = { res ->
-                                                    when (res) {
-                                                        is Response.Success -> {
-                                                            onDeleteAccount()
-                                                        }
-                                                        is Response.Failure -> {
-                                                            Toast.makeText(
-                                                                context,
-                                                                res.error.toString(),
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        }
-                                                    }
-                                                }
-                                            ))
-                                        }
+                                        onDeleteAccount()
                                     }
                                 }
                             }

@@ -77,9 +77,8 @@ fun CustomAlertDialog(
                     //  alert title
                     Text(
                         text = title,
-                        fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 1f)
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f)
                     )
                 }
                 content()
@@ -95,8 +94,7 @@ fun CustomAlertDialog(
             ) {
                 Text(
                     text = "Confirm",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         },
@@ -110,8 +108,7 @@ fun CustomAlertDialog(
             ) {
                 Text(
                     text = "Cancel",
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         },

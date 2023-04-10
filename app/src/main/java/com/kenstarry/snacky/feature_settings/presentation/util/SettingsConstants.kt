@@ -6,6 +6,9 @@ import com.kenstarry.snacky.feature_settings.domain.model.SettingsSectionItem
 
 object SettingsConstants {
 
+    const val LOGOUT_DIALOG = "logout alert dialog"
+    const val DELETE_ACCOUNT_DIALOG = "delete account alert dialog"
+
     //  theme section
     val themeOptions = listOf(
         SettingsSectionItem("Dark Theme", Icons.Outlined.Nightlight),
